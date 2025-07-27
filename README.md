@@ -25,7 +25,7 @@ Namma Nagara is an AI-powered civic intelligence platform designed to tackle Ben
 | **Backend**        | Firebase (Realtime DB, Cloud Functions, Firestore, FCM, Authentication), Java Springboot      |
 | **AI/ML**          | Gemini (NLP + Multimodal), Vertex AI, Sentiment Analysis                                      |
 | **Database**       | BigQuery, Firestore                                                                           |
-| **Deployment**     |                                                                                               |
+
 
 
 ## 📊 System Architecture
