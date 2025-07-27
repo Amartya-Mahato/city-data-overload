@@ -1,0 +1,116 @@
+{
+  "app_title": "Bengaluru City Pulse",
+  "settings": "Settings",
+  "loading": "Loading...",
+  "error": "Error",
+  "retry": "Retry",
+  "save": "Save",
+  "cancel": "Cancel",
+  
+  "auth": {
+    "sign_in": "Sign In",
+    "sign_in_google": "Sign in with Google",
+    "sign_out": "Sign Out",
+    "welcome": "Welcome to Bengaluru City Pulse",
+    "subtitle": "Stay informed about your city's pulse"
+  },
+  
+  "navigation": {
+    "home": "Home",
+    "map": "Map",
+    "alerts": "Alerts",
+    "report": "Report",
+    "profile": "Profile"
+  },
+  
+  "settings_screen": {
+    "user_profile": "User Profile",
+    "notification_settings": "Notification Settings",
+    "app_settings": "App Settings",
+    "about": "About",
+    "push_notifications": "Push Notifications",
+    "push_notifications_subtitle": "Receive alerts for events in your area",
+    "alert_radius": "Alert Radius",
+    "alert_radius_subtitle": "{radius} km",
+    "alert_categories": "Alert Categories",
+    "alert_categories_subtitle": "{count} categories selected",
+    "dark_mode": "Dark Mode",
+    "dark_mode_subtitle": "Use dark theme",
+    "language": "Language",
+    "language_subtitle": "Select your preferred language",
+    "clear_cache": "Clear Cache",
+    "clear_cache_subtitle": "Free up storage space",
+    "app_version": "App Version",
+    "privacy_policy": "Privacy Policy",
+    "terms_of_service": "Terms of Service",
+    "contact_support": "Contact Support"
+  },
+  
+  "alert_radius_dialog": {
+    "title": "Alert Radius",
+    "description": "Receive alerts within {radius} km"
+  },
+  
+  "alert_categories_dialog": {
+    "title": "Alert Categories"
+  },
+  
+  "language_selection": {
+    "title": "Select Language",
+    "english": "English",
+    "hindi": "हिन्दी",
+    "kannada": "ಕನ್ನಡ"
+  },
+  
+  "clear_cache_dialog": {
+    "title": "Clear Cache",
+    "description": "This will clear all cached data including downloaded images and temporary files. Are you sure?",
+    "clear": "Clear"
+  },
+  
+  "map_screen": {
+    "legend": "Legend",
+    "high_severity": "High Severity",
+    "medium_severity": "Medium Severity",
+    "low_severity": "Low Severity",
+    "your_location": "Your Location"
+  },
+  
+  "event_details": {
+    "reported_by": "Reported by",
+    "severity": "Severity",
+    "category": "Category",
+    "impact_radius": "Impact Radius",
+    "timestamp": "Time"
+  },
+  
+  "categories": {
+    "traffic": "Traffic",
+    "emergency": "Emergency", 
+    "weather": "Weather",
+    "infrastructure": "Infrastructure",
+    "utilities": "Utilities",
+    "fire": "Fire",
+    "flood": "Flood",
+    "earthquake": "Earthquake",
+    "storm": "Storm",
+    "heat_wave": "Heat Wave",
+    "drought": "Drought",
+    "landslide": "Landslide",
+    "tsunami": "Tsunami",
+    "thunderstorm": "Thunderstorm"
+  },
+  
+  "severity_levels": {
+    "high": "High",
+    "medium": "Medium", 
+    "low": "Low"
+  },
+  
+  "error_messages": {
+    "location_permission": "Location permission required",
+    "network_error": "Network error occurred",
+    "api_error": "Unable to fetch data",
+    "unknown_error": "An unknown error occurred"
+  }
+} 

@@ -1,0 +1,294 @@
+### City Data Overload Server - API Testing
+### Base URL: http://localhost:8080
+
+### 1. Health Check
+GET http://localhost:8080/api/v1/flutter/health
+Content-Type: application/json
+
+###
+
+### 2. Test BigQuery Data Fetching
+GET http://localhost:8080/api/v1/flutter/test/bigquery?limit=5
+Content-Type: application/json
+
+###
+
+### 3. Get Bengaluru Areas
+GET http://localhost:8080/api/v1/flutter/bengaluru/areas
+Content-Type: application/json
+
+###
+
+### 4. Comprehensive Map Data (Flutter Map Page)
+POST http://localhost:8080/api/v1/flutter/map/comprehensive
+Content-Type: application/json
+
+{
+  "latitude": 12.9716,
+  "longitude": 77.5946,
+  "area": "MG Road",
+  "radiusKm": 5.0,
+  "maxResults": 20
+}
+
+###
+
+### 5. Simple Chat Query
+POST http://localhost:8080/api/v1/flutter/chat/query
+Content-Type: application/json
+
+{
+  "query": "What's happening in Bengaluru today?",
+  "userId": "test-user-123"
+}
+
+###
+
+### 6. Intelligent Chat with Map Data
+POST http://localhost:8080/api/v1/flutter/chat/intelligent
+Content-Type: application/json
+
+{
+  "query": "Show me traffic alerts and events near MG Road",
+  "latitude": 12.9716,
+  "longitude": 77.5946,
+  "area": "MG Road",
+  "userId": "test-user-123"
+}
+
+###
+
+### 7. Get Synthesized Events
+POST http://localhost:8080/api/v1/flutter/events/synthesized
+Content-Type: application/json
+
+{
+  "latitude": 12.9352,
+  "longitude": 77.6245,
+  "area": "Koramangala",
+  "radiusKm": 3.0,
+  "maxResults": 15
+}
+
+###
+
+### 8. Get Predictive Alerts
+POST http://localhost:8080/api/v1/flutter/alerts/predictive
+Content-Type: application/json
+
+{
+  "area": "Koramangala",
+  "latitude": 12.9352,
+  "longitude": 77.6245,
+  "forecastHours": 24
+}
+
+###
+
+### 9. Get Mood Map Data
+POST http://localhost:8080/api/v1/flutter/map/mood
+Content-Type: application/json
+
+{
+  "areas": ["Koramangala", "MG Road", "HSR Layout", "Indiranagar"],
+  "timeframe": "24h"
+}
+
+###
+
+### 10. Submit Citizen Report (Text Only)
+POST http://localhost:8080/api/v1/flutter/reports/submit
+Content-Type: application/json
+
+{
+  "userId": "test-user-456",
+  "content": "Traffic jam due to construction work on Hosur Road near Electronic City",
+  "latitude": 12.8456,
+  "longitude": 77.6603,
+  "area": "Electronic City",
+  "ttlHours": 12
+}
+
+###
+
+### 11. Submit Citizen Report with Media (Multipart - use form data)
+POST http://localhost:8080/api/v1/flutter/reports/submit
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="userId"
+
+test-user-789
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="content"
+
+Water pipeline burst on Infantry Road causing road blockage
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="latitude"
+
+12.9784
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="longitude"
+
+77.6408
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="area"
+
+Indiranagar
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="ttlHours"
+
+24
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+### 12. Get User Report History
+GET http://localhost:8080/api/v1/flutter/reports/history/test-user-456?limit=10
+Content-Type: application/json
+
+###
+
+### 13. Delete User Report (replace {reportId} with actual report ID)
+DELETE http://localhost:8080/api/v1/flutter/reports/report-id-123?userId=test-user-456
+Content-Type: application/json
+
+###
+
+### 14. Landing Page
+GET http://localhost:8080/
+Content-Type: application/json
+
+###
+
+### 15. API Documentation
+GET http://localhost:8080/api
+Content-Type: application/json
+
+###
+
+### 16. Test Different Areas - Whitefield
+POST http://localhost:8080/api/v1/flutter/chat/intelligent
+Content-Type: application/json
+
+{
+  "query": "Any infrastructure issues in Whitefield?",
+  "latitude": 12.9698,
+  "longitude": 77.7500,
+  "area": "Whitefield",
+  "userId": "test-user-123"
+}
+
+###
+
+### 17. Test Category Specific Query
+POST http://localhost:8080/api/v1/flutter/chat/intelligent
+Content-Type: application/json
+
+{
+  "query": "Show me all traffic alerts and road conditions",
+  "latitude": 12.9716,
+  "longitude": 77.5946,
+  "area": "MG Road",
+  "userId": "test-user-123"
+}
+
+###
+
+### 18. Test Emergency Query
+POST http://localhost:8080/api/v1/flutter/chat/intelligent
+Content-Type: application/json
+
+{
+  "query": "Are there any emergency alerts or critical situations?",
+  "latitude": 12.9352,
+  "longitude": 77.6245,
+  "area": "Koramangala",
+  "userId": "test-user-123"
+}
+
+###
+
+### 19. Test Mood Analysis Query
+POST http://localhost:8080/api/v1/flutter/chat/intelligent
+Content-Type: application/json
+
+{
+  "query": "What's the general mood and sentiment in HSR Layout?",
+  "latitude": 12.9082,
+  "longitude": 77.6476,
+  "area": "HSR Layout",
+  "userId": "test-user-123"
+}
+
+###
+
+### 20. Test Predictive Query
+POST http://localhost:8080/api/v1/flutter/chat/intelligent
+Content-Type: application/json
+
+{
+  "query": "What can we expect to happen in the next few hours?",
+  "latitude": 12.9165,
+  "longitude": 77.6761,
+  "area": "Bellandur",
+  "userId": "test-user-123"
+}
+
+###
+
+### ===============================================
+### 🔧 SERPAPI ENDPOINTS (FIXED!)
+### ===============================================
+
+### 19. SerpAPI - Simple Data Fetch (All Categories)
+POST http://localhost:8080/api/v1/serpapi/fetch/all?location=Bengaluru%2C%20Karnataka%2C%20India
+Content-Type: application/json
+
+### ✅ SERPAPI ERRORS FIXED - No more Jackson deserialization errors
+### ✅ Graceful handling of "Google hasn't returned any results"
+### ⚠️ May take 30-60 seconds to fetch from multiple sources
+
+###
+
+### 20. SerpAPI - Full AI Pipeline (SYNC - with 5min timeout)
+POST http://localhost:8080/api/v1/serpapi/fetch/process-store?location=Bengaluru%2C%20Karnataka%2C%20India
+Content-Type: application/json
+
+### ✅ TIMEOUT FIXED - Now supports 5-minute timeout for AI processing
+### ✅ SERPAPI ERRORS FIXED - No more Jackson deserialization errors  
+### ⚠️ HEAVY OPERATION - Fetches data + AI processing + Firestore storage
+### ⚠️ Can take 2-5 minutes - Monitor logs for progress
+
+###
+
+### 21. SerpAPI - Full AI Pipeline (ASYNC - Returns immediately)
+POST http://localhost:8080/api/v1/serpapi/fetch/process-store/async?location=Bengaluru%2C%20Karnataka%2C%20India
+Content-Type: application/json
+
+### ✅ Returns immediately with task ID
+### ✅ Processing continues in background  
+### ✅ Perfect for UI integrations - no waiting!
+### 📊 Check logs for task completion status
+
+###
+
+### 22. SerpAPI - Specific Categories
+POST http://localhost:8080/api/v1/serpapi/fetch/categories?location=Bengaluru%2C%20Karnataka%2C%20India&categories=TRAFFIC,EMERGENCY
+Content-Type: application/json
+
+### ✅ Fetch only specific categories
+### ✅ Faster than full fetch
+### ✅ Good for testing specific data sources
+
+###
+
+### 23. SerpAPI - Health Check
+GET http://localhost:8080/api/v1/serpapi/test-connection
+Content-Type: application/json
+
+### ✅ Quick test of SerpAPI connectivity
+### ✅ No data processing - just connection test
+### ✅ Returns API status and response time
+
+### 

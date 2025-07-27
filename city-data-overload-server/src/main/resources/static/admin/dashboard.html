@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Data Overload - Admin Portal</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ecf0f1;
+            font-size: 18px;
+        }
+        
+        .nav-item {
+            padding: 15px 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background: rgba(52, 152, 219, 0.2);
+            border-left-color: #3498db;
+        }
+        
+        .nav-item i {
+            margin-right: 10px;
+            width: 20px;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .page-title {
+            font-size: 24px;
+            color: #2c3e50;
+            margin: 0;
+        }
+        
+        .refresh-btn {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        /* Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+        
+        .stat-value {
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        /* Tables */
+        .data-table {
+            width: 100%;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .table-header {
+            background: #3498db;
+            color: white;
+            padding: 15px 20px;
+            font-weight: bold;
+        }
+        
+        .table-content {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-danger { background: #e74c3c; color: white; }
+        .btn-info { background: #3498db; color: white; }
+        .btn-success { background: #27ae60; color: white; }
+        .btn-warning { background: #f39c12; color: white; }
+        
+        .btn:hover {
+            opacity: 0.8;
+            transform: translateY(-1px);
+        }
+        
+        /* Status badges */
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .status-healthy { background: #d5f4e6; color: #27ae60; }
+        .status-degraded { background: #ffeaa7; color: #f39c12; }
+        .status-unhealthy { background: #fab1a0; color: #e74c3c; }
+        
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+        }
+        
+        /* Charts placeholder */
+        .chart-container {
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            border-radius: 5px;
+            margin: 15px 0;
+            color: #7f8c8d;
+        }
+        
+        /* Hidden sections */
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .admin-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <h2>🏙️ Admin Portal</h2>
+            <div class="nav-item active" onclick="showSection('dashboard')">
+                <i>📊</i> Dashboard
+            </div>
+            <div class="nav-item" onclick="showSection('analytics')">
+                <i>📈</i> Analytics
+            </div>
+            <div class="nav-item" onclick="showSection('data-management')">
+                <i>🗃️</i> Data Management
+            </div>
+            <div class="nav-item" onclick="showSection('user-management')">
+                <i>👥</i> User Management
+            </div>
+            <div class="nav-item" onclick="showSection('system-control')">
+                <i>⚙️</i> System Control
+            </div>
+            <div class="nav-item" onclick="showSection('reports')">
+                <i>📋</i> Reports
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="section active">
+                <div class="header">
+                    <h1 class="page-title">System Dashboard</h1>
+                    <button class="refresh-btn" onclick="refreshDashboard()">🔄 Refresh</button>
+                </div>
+
+                <div class="cards-grid">
+                    <div class="card">
+                        <h3>System Health</h3>
+                        <div id="systemHealth" class="loading">Loading...</div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Event Statistics</h3>
+                        <div id="eventStats" class="loading">Loading...</div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Agent Status</h3>
+                        <div id="agentStatus" class="loading">Loading...</div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Recent Activity</h3>
+                        <div id="recentActivity" class="loading">Loading...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div id="analytics" class="section">
+                <div class="header">
+                    <h1 class="page-title">Analytics & Insights</h1>
+                    <button class="refresh-btn" onclick="refreshAnalytics()">📊 Refresh Data</button>
+                </div>
+
+                <div class="cards-grid">
+                    <div class="card">
+                        <h3>Event Trends</h3>
+                        <div class="chart-container">
+                            📈 Event trends chart would be here<br>
+                            <small>Integration with Chart.js or similar</small>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Category Distribution</h3>
+                        <div id="categoryDistribution" class="loading">Loading...</div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Location Analytics</h3>
+                        <div id="locationAnalytics" class="loading">Loading...</div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Performance Metrics</h3>
+                        <div id="performanceMetrics" class="loading">Loading...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Management Section -->
+            <div id="data-management" class="section">
+                <div class="header">
+                    <h1 class="page-title">Data Management</h1>
+                    <div>
+                        <button class="btn btn-info" onclick="loadBigQueryEvents()">📊 Load BigQuery</button>
+                        <button class="btn btn-success" onclick="loadFirestoreEvents()">🔥 Load Firestore</button>
+                    </div>
+                </div>
+
+                <div class="data-table">
+                    <div class="table-header">
+                        Events Data (<span id="dataSource">BigQuery</span>)
+                    </div>
+                    <div class="table-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Area</th>
+                                    <th>Severity</th>
+                                    <th>Timestamp</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="eventsTableBody">
+                                <tr><td colspan="7" class="loading">Click a button above to load data</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Management Section -->
+            <div id="user-management" class="section">
+                <div class="header">
+                    <h1 class="page-title">User Management</h1>
+                    <div>
+                        <input type="text" id="userIdInput" placeholder="Enter User ID" style="padding: 8px; margin-right: 10px;">
+                        <button class="btn btn-info" onclick="loadUserData()">🔍 Load User</button>
+                    </div>
+                </div>
+
+                <div class="cards-grid">
+                    <div class="card">
+                        <h3>User Statistics</h3>
+                        <div id="userStatistics" class="loading">Enter a User ID and click Load User</div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>User Reports</h3>
+                        <div id="userReports" class="loading">No user selected</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Control Section -->
+            <div id="system-control" class="section">
+                <div class="header">
+                    <h1 class="page-title">System Control</h1>
+                    <button class="btn btn-warning" onclick="performCleanup()">🧹 System Cleanup</button>
+                </div>
+
+                <div class="cards-grid">
+                    <div class="card">
+                        <h3>Agent Control</h3>
+                        <div id="agentControl" class="loading">Loading agent status...</div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>System Operations</h3>
+                        <div>
+                            <button class="btn btn-success" onclick="performCleanup()" style="margin: 5px;">🧹 Clean Expired Data</button><br>
+                            <button class="btn btn-info" onclick="refreshAllData()" style="margin: 5px;">🔄 Refresh All Data</button><br>
+                            <button class="btn btn-warning" onclick="checkSystemHealth()" style="margin: 5px;">❤️ Health Check</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Section -->
+            <div id="reports" class="section">
+                <div class="header">
+                    <h1 class="page-title">System Reports</h1>
+                    <button class="btn btn-success" onclick="generateReport()">📋 Generate Report</button>
+                </div>
+
+                <div class="card">
+                    <h3>System Report</h3>
+                    <div id="systemReport" class="loading">Click "Generate Report" to create a comprehensive system report</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const baseUrl = 'http://localhost:8080';
+        
+        // Navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked nav item
+            event.target.classList.add('active');
+        }
+
+        // API calls
+        async function makeRequest(url, options = {}) {
+            try {
+                const response = await fetch(url, {
+                    headers: { 'Content-Type': 'application/json' },
+                    ...options
+                });
+                return await response.json();
+            } catch (error) {
+                console.error('API Error:', error);
+                return { error: error.message };
+            }
+        }
+
+        // Dashboard functions
+        async function refreshDashboard() {
+            const overview = await makeRequest(`${baseUrl}/admin/api/analytics/overview`);
+            
+            if (overview.error) {
+                document.getElementById('systemHealth').innerHTML = `<div style="color: red;">Error: ${overview.error}</div>`;
+                return;
+            }
+
+            // System Health
+            const healthHtml = Object.entries(overview.systemHealth || {})
+                .map(([key, value]) => `<div class="stat-item"><span>${key}</span><span class="stat-value">${value}</span></div>`)
+                .join('');
+            document.getElementById('systemHealth').innerHTML = healthHtml;
+
+            // Event Stats
+            const eventStatsHtml = overview.eventStats && overview.eventStats.statistics ? 
+                overview.eventStats.statistics.slice(0, 5).map(stat => 
+                    `<div class="stat-item"><span>${stat.category} (${stat.severity})</span><span class="stat-value">${stat.count}</span></div>`
+                ).join('') : '<div>No event statistics available</div>';
+            document.getElementById('eventStats').innerHTML = eventStatsHtml;
+
+            // Agent Status
+            const agentHtml = Object.entries(overview.agentPerformance || {})
+                .map(([agent, status]) => 
+                    `<div class="stat-item"><span>${agent}</span><span class="status-badge status-${status.toLowerCase()}">${status}</span></div>`
+                ).join('');
+            document.getElementById('agentStatus').innerHTML = agentHtml;
+
+            // Recent Activity
+            const activityHtml = (overview.recentActivity || [])
+                .map(activity => 
+                    `<div class="stat-item"><span>${activity.description}</span><span class="stat-value">${activity.type}</span></div>`
+                ).join('');
+            document.getElementById('recentActivity').innerHTML = activityHtml;
+        }
+
+        async function refreshAnalytics() {
+            const analytics = await makeRequest(`${baseUrl}/admin/api/analytics/events?days=7`);
+            
+            if (analytics.error) return;
+
+            // Category Distribution
+            const catHtml = Object.entries(analytics.categoryDistribution || {})
+                .map(([category, count]) => 
+                    `<div class="stat-item"><span>${category}</span><span class="stat-value">${count}</span></div>`
+                ).join('');
+            document.getElementById('categoryDistribution').innerHTML = catHtml;
+
+            // Location Analytics
+            const locHtml = (analytics.locationAnalytics?.topAreas || [])
+                .map(area => 
+                    `<div class="stat-item"><span>${area.area}</span><span class="stat-value">${area.events}</span></div>`
+                ).join('');
+            document.getElementById('locationAnalytics').innerHTML = locHtml;
+
+            // Performance Metrics
+            const perfHtml = Object.entries(analytics.performance || {})
+                .map(([metric, value]) => 
+                    `<div class="stat-item"><span>${metric}</span><span class="stat-value">${value}</span></div>`
+                ).join('');
+            document.getElementById('performanceMetrics').innerHTML = perfHtml;
+        }
+
+        async function loadBigQueryEvents() {
+            document.getElementById('dataSource').textContent = 'BigQuery';
+            const data = await makeRequest(`${baseUrl}/admin/api/data/bigquery/events?limit=20`);
+            displayEventsTable(data.events || []);
+        }
+
+        async function loadFirestoreEvents() {
+            document.getElementById('dataSource').textContent = 'Firestore';
+            const data = await makeRequest(`${baseUrl}/admin/api/data/firestore/events?area=Koramangala&limit=20`);
+            displayEventsTable(data.events || []);
+        }
+
+        function displayEventsTable(events) {
+            const tbody = document.getElementById('eventsTableBody');
+            
+            if (events.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7">No events found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = events.map(event => `
+                <tr>
+                    <td>${event.id?.substring(0, 8) || 'N/A'}</td>
+                    <td>${event.title || 'N/A'}</td>
+                    <td>${event.category || 'N/A'}</td>
+                    <td>${event.location?.area || 'N/A'}</td>
+                    <td>${event.severity || 'N/A'}</td>
+                    <td>${event.timestamp ? new Date(event.timestamp).toLocaleString() : 'N/A'}</td>
+                    <td>
+                        <button class="btn btn-info" onclick="viewEvent('${event.id}')">👁️</button>
+                        <button class="btn btn-danger" onclick="deleteEvent('${event.id}')">🗑️</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function loadUserData() {
+            const userId = document.getElementById('userIdInput').value.trim();
+            if (!userId) {
+                alert('Please enter a User ID');
+                return;
+            }
+
+            const data = await makeRequest(`${baseUrl}/admin/api/data/users/${userId}/reports?limit=10`);
+            
+            if (data.error) {
+                document.getElementById('userStatistics').innerHTML = `<div style="color: red;">Error: ${data.error}</div>`;
+                return;
+            }
+
+            // User Statistics
+            const statsHtml = Object.entries(data.statistics || {})
+                .map(([key, value]) => 
+                    `<div class="stat-item"><span>${key}</span><span class="stat-value">${value}</span></div>`
+                ).join('');
+            document.getElementById('userStatistics').innerHTML = statsHtml;
+
+            // User Reports
+            const reportsHtml = (data.reports || [])
+                .map(report => `
+                    <div class="stat-item">
+                        <span>${report.content?.substring(0, 50) || 'N/A'}...</span>
+                        <button class="btn btn-danger btn-sm" onclick="deleteUserReport('${userId}', '${report.id}')">🗑️</button>
+                    </div>
+                `).join('');
+            document.getElementById('userReports').innerHTML = reportsHtml || '<div>No reports found</div>';
+        }
+
+        async function performCleanup() {
+            if (!confirm('Are you sure you want to perform system cleanup?')) return;
+            
+            const result = await makeRequest(`${baseUrl}/admin/api/system/cleanup`, { method: 'POST' });
+            
+            if (result.error) {
+                alert(`Cleanup failed: ${result.error}`);
+            } else {
+                alert(`Cleanup completed!\nFirestore events deleted: ${result.firestoreEventsDeleted}\nUser reports expired: ${result.userReportsExpired}`);
+            }
+        }
+
+        async function checkSystemHealth() {
+            const agentStatus = await makeRequest(`${baseUrl}/admin/api/system/agents/status`);
+            
+            const agentHtml = Object.entries(agentStatus)
+                .map(([agent, info]) => 
+                    `<div class="stat-item"><span>${info.id}</span><span class="status-badge status-${info.health.toLowerCase()}">${info.health}</span></div>`
+                ).join('');
+            document.getElementById('agentControl').innerHTML = agentHtml;
+        }
+
+        async function generateReport() {
+            document.getElementById('systemReport').innerHTML = '<div class="loading">Generating comprehensive report...</div>';
+            
+            // Simulate report generation
+            setTimeout(() => {
+                const reportHtml = `
+                    <div class="stat-item"><span>Report Generated</span><span class="stat-value">${new Date().toLocaleString()}</span></div>
+                    <div class="stat-item"><span>Total Events</span><span class="stat-value">1,234</span></div>
+                    <div class="stat-item"><span>Active Users</span><span class="stat-value">567</span></div>
+                    <div class="stat-item"><span>System Health</span><span class="stat-value">HEALTHY</span></div>
+                    <div class="stat-item"><span>Data Sources</span><span class="stat-value">BigQuery, Firestore</span></div>
+                `;
+                document.getElementById('systemReport').innerHTML = reportHtml;
+            }, 2000);
+        }
+
+        function refreshAllData() {
+            refreshDashboard();
+            refreshAnalytics();
+            checkSystemHealth();
+        }
+
+        async function viewEvent(eventId) {
+            alert(`View event details for: ${eventId}\n(Feature would open detailed modal)`);
+        }
+
+        async function deleteEvent(eventId) {
+            if (!confirm(`Are you sure you want to delete event ${eventId}?`)) return;
+            
+            const result = await makeRequest(`${baseUrl}/admin/api/data/events/${eventId}`, { method: 'DELETE' });
+            
+            if (result.error) {
+                alert(`Delete failed: ${result.error}`);
+            } else {
+                alert('Delete request processed. Note: BigQuery events cannot be directly deleted.');
+            }
+        }
+
+        async function deleteUserReport(userId, reportId) {
+            if (!confirm(`Delete report ${reportId} for user ${userId}?`)) return;
+            
+            const result = await makeRequest(`${baseUrl}/admin/api/data/users/${userId}/reports/${reportId}`, { method: 'DELETE' });
+            
+            if (result.error) {
+                alert(`Delete failed: ${result.error}`);
+            } else {
+                alert('Report deleted successfully');
+                loadUserData(); // Refresh the data
+            }
+        }
+
+        // Initialize dashboard on load
+        document.addEventListener('DOMContentLoaded', function() {
+            refreshDashboard();
+            checkSystemHealth();
+        });
+    </script>
+</body>
+</html> 

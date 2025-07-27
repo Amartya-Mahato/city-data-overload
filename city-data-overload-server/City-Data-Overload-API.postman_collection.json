@@ -1,0 +1,279 @@
+{
+	"info": {
+		"_postman_id": "city-data-overload-api",
+		"name": "City Data Overload API",
+		"description": "Complete API testing collection for the City Data Overload Bengaluru challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Health & Status",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/v1/flutter/health"
+					}
+				},
+				{
+					"name": "Test BigQuery",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/flutter/test/bigquery?limit=5",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "flutter", "test", "bigquery"],
+							"query": [{"key": "limit", "value": "5"}]
+						}
+					}
+				},
+				{
+					"name": "Get Bengaluru Areas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/v1/flutter/bengaluru/areas"
+					}
+				}
+			]
+		},
+		{
+			"name": "Map & Chat Endpoints",
+			"item": [
+				{
+					"name": "Comprehensive Map Data",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"latitude\": 12.9716,\n  \"longitude\": 77.5946,\n  \"area\": \"MG Road\",\n  \"radiusKm\": 5.0,\n  \"maxResults\": 20\n}"
+						},
+						"url": "{{baseUrl}}/api/v1/flutter/map/comprehensive"
+					}
+				},
+				{
+					"name": "Simple Chat Query",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"What's happening in Bengaluru today?\",\n  \"userId\": \"test-user-123\"\n}"
+						},
+						"url": "{{baseUrl}}/api/v1/flutter/chat/query"
+					}
+				},
+				{
+					"name": "Intelligent Chat with Map Data",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"Show me traffic alerts and events near MG Road\",\n  \"latitude\": 12.9716,\n  \"longitude\": 77.5946,\n  \"area\": \"MG Road\",\n  \"userId\": \"test-user-123\"\n}"
+						},
+						"url": "{{baseUrl}}/api/v1/flutter/chat/intelligent"
+					}
+				}
+			]
+		},
+		{
+			"name": "Agent Specific Endpoints",
+			"item": [
+				{
+					"name": "Synthesized Events",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"latitude\": 12.9352,\n  \"longitude\": 77.6245,\n  \"area\": \"Koramangala\",\n  \"radiusKm\": 3.0,\n  \"maxResults\": 15\n}"
+						},
+						"url": "{{baseUrl}}/api/v1/flutter/events/synthesized"
+					}
+				},
+				{
+					"name": "Predictive Alerts",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"area\": \"Koramangala\",\n  \"latitude\": 12.9352,\n  \"longitude\": 77.6245,\n  \"forecastHours\": 24\n}"
+						},
+						"url": "{{baseUrl}}/api/v1/flutter/alerts/predictive"
+					}
+				},
+				{
+					"name": "Mood Map Data",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"areas\": [\"Koramangala\", \"MG Road\", \"HSR Layout\", \"Indiranagar\"],\n  \"timeframe\": \"24h\"\n}"
+						},
+						"url": "{{baseUrl}}/api/v1/flutter/map/mood"
+					}
+				}
+			]
+		},
+		{
+			"name": "Citizen Reports",
+			"item": [
+				{
+					"name": "Submit Report (JSON)",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"test-user-456\",\n  \"content\": \"Traffic jam due to construction work on Hosur Road near Electronic City\",\n  \"latitude\": 12.8456,\n  \"longitude\": 77.6603,\n  \"area\": \"Electronic City\",\n  \"ttlHours\": 12\n}"
+						},
+						"url": "{{baseUrl}}/api/v1/flutter/reports/submit"
+					}
+				},
+				{
+					"name": "Get User Report History",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/flutter/reports/history/test-user-456?limit=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "flutter", "reports", "history", "test-user-456"],
+							"query": [{"key": "limit", "value": "10"}]
+						}
+					}
+				},
+				{
+					"name": "Delete User Report",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/flutter/reports/report-id-123?userId=test-user-456",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "flutter", "reports", "report-id-123"],
+							"query": [{"key": "userId", "value": "test-user-456"}]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Location-Based Tests",
+			"item": [
+				{
+					"name": "Koramangala Events",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"What's happening in Koramangala? Show me events and alerts.\",\n  \"latitude\": 12.9352,\n  \"longitude\": 77.6245,\n  \"area\": \"Koramangala\",\n  \"userId\": \"test-user-123\"\n}"
+						},
+						"url": "{{baseUrl}}/api/v1/flutter/chat/intelligent"
+					}
+				},
+				{
+					"name": "Whitefield Infrastructure",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"Any infrastructure issues in Whitefield?\",\n  \"latitude\": 12.9698,\n  \"longitude\": 77.7500,\n  \"area\": \"Whitefield\",\n  \"userId\": \"test-user-123\"\n}"
+						},
+						"url": "{{baseUrl}}/api/v1/flutter/chat/intelligent"
+					}
+				},
+				{
+					"name": "HSR Layout Mood",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"What's the general mood and sentiment in HSR Layout?\",\n  \"latitude\": 12.9082,\n  \"longitude\": 77.6476,\n  \"area\": \"HSR Layout\",\n  \"userId\": \"test-user-123\"\n}"
+						},
+						"url": "{{baseUrl}}/api/v1/flutter/chat/intelligent"
+					}
+				}
+			]
+		},
+		{
+			"name": "Category-Specific Tests",
+			"item": [
+				{
+					"name": "Traffic Alerts Query",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"Show me all traffic alerts and road conditions\",\n  \"latitude\": 12.9716,\n  \"longitude\": 77.5946,\n  \"area\": \"MG Road\",\n  \"userId\": \"test-user-123\"\n}"
+						},
+						"url": "{{baseUrl}}/api/v1/flutter/chat/intelligent"
+					}
+				},
+				{
+					"name": "Emergency Alerts Query",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"Are there any emergency alerts or critical situations?\",\n  \"latitude\": 12.9352,\n  \"longitude\": 77.6245,\n  \"area\": \"Koramangala\",\n  \"userId\": \"test-user-123\"\n}"
+						},
+						"url": "{{baseUrl}}/api/v1/flutter/chat/intelligent"
+					}
+				},
+				{
+					"name": "Predictive Analysis Query",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"What can we expect to happen in the next few hours?\",\n  \"latitude\": 12.9165,\n  \"longitude\": 77.6761,\n  \"area\": \"Bellandur\",\n  \"userId\": \"test-user-123\"\n}"
+						},
+						"url": "{{baseUrl}}/api/v1/flutter/chat/intelligent"
+					}
+				}
+			]
+		},
+		{
+			"name": "Documentation & Misc",
+			"item": [
+				{
+					"name": "Landing Page",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/"
+					}
+				},
+				{
+					"name": "API Documentation",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api"
+					}
+				}
+			]
+		}
+	]
+} 

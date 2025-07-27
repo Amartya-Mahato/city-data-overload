@@ -1,0 +1,1374 @@
+openapi: 3.0.3
+info:
+  title: City Data Overload - Flutter API
+  description: |
+    Comprehensive API for the City Data Overload Flutter mobile application.
+    
+    ## Architecture
+    - **CoordinatorAgent System** (`/api/flutter`) - New dynamic routing system
+    - **Specialized Endpoints** (`/api/v1/flutter`) - Direct agent access
+    
+    ## Key Features
+    - 🤖 AI-powered chat responses
+    - 📍 Location-based data filtering
+    - 📊 Real-time event streams
+    - 📱 Multimodal report submissions
+    - 🎯 Predictive alerts and insights
+    
+    ## Authentication
+    Currently using basic user ID tracking. Production should implement proper auth.
+    
+  version: 1.0.0
+  contact:
+    name: City Data Overload Team
+    email: support@citydata.com
+  license:
+    name: MIT
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+  - url: https://api.citydata.com
+    description: Production server
+
+tags:
+  - name: Coordinator System
+    description: Dynamic routing through CoordinatorAgent (Recommended)
+  - name: Map & Chat
+    description: Map visualization with intelligent chat
+  - name: Events
+    description: City events and news
+  - name: Alerts
+    description: Predictive alerts and warnings
+  - name: Reporting
+    description: Citizen report submissions
+  - name: Streams
+    description: Real-time data streams
+  - name: Utilities
+    description: Health checks and system info
+
+paths:
+  # ============ COORDINATOR SYSTEM (New Dynamic Routing) ============
+  
+  /api/flutter/chat:
+    post:
+      tags: [Coordinator System]
+      summary: Universal Chat Interface
+      description: |
+        **Primary Flutter endpoint** - Routes to appropriate handler based on page context.
+        
+        ✅ **Use this for all text-based interactions**
+        - Home page chat
+        - Events page queries  
+        - Alerts page questions
+        - General conversation
+        
+        The CoordinatorAgent automatically routes requests to specialized handlers.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+            examples:
+              home_page_chat:
+                summary: Home Page Chat
+                value:
+                  query: "What's happening in my area today?"
+                  page: "home"
+                  userId: "user_123"
+                  latitude: 12.9716
+                  longitude: 77.5946
+                  area: "MG Road"
+                  radiusKm: 5.0
+              events_page_query:
+                summary: Events Page Query
+                value:
+                  query: "Show me traffic events near Koramangala"
+                  page: "events"
+                  userId: "user_123"
+                  latitude: 12.9352
+                  longitude: 77.6245
+                  area: "Koramangala"
+                  category: "TRAFFIC"
+                  maxResults: 15
+              alerts_page_question:
+                summary: Alerts Page Question
+                value:
+                  query: "Are there any emergency alerts I should know about?"
+                  page: "alerts"
+                  userId: "user_123"
+                  latitude: 12.9716
+                  longitude: 77.5946
+                  area: "MG Road"
+              general_chat:
+                summary: General Chat
+                value:
+                  query: "How do I report a water shortage?"
+                  page: "chat"
+                  userId: "user_123"
+      responses:
+        '200':
+          description: Successful response with page-specific data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnifiedResponse'
+              examples:
+                home_response:
+                  summary: Home Page Response
+                  value:
+                    success: true
+                    message: "Welcome to your city dashboard! I can see 3 recent events and 1 alert in MG Road area."
+                    page: "home"
+                    summary:
+                      total_events: 3
+                      active_alerts: 1
+                      last_updated: "2024-01-15T10:30:00"
+                    recent_events: []
+                    recent_alerts: []
+                    quick_actions: ["View recent events", "Check alerts in my area"]
+                events_response:
+                  summary: Events Page Response
+                  value:
+                    success: true
+                    message: "Found 5 traffic events near Koramangala. The main issues are on Outer Ring Road."
+                    page: "events"
+                    events: []
+                    total_count: 5
+                    filters_applied: {"category": "TRAFFIC", "area": "Koramangala"}
+                    search_suggestions: ["Events near me", "Traffic updates"]
+
+  /api/flutter/events:
+    post:
+      tags: [Coordinator System]
+      summary: Events Page Handler
+      description: |
+        **Dedicated events endpoint** using EventsPageHandler.
+        Returns filtered events list with intelligent commentary.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventsRequest'
+            examples:
+              traffic_events:
+                summary: Traffic Events Query
+                value:
+                  userId: "user_123"
+                  latitude: 12.9352
+                  longitude: 77.6245
+                  area: "Koramangala"
+                  radiusKm: 3.0
+                  category: "TRAFFIC"
+                  maxResults: 20
+              all_events_area:
+                summary: All Events in Area
+                value:
+                  userId: "user_123"
+                  latitude: 12.9716
+                  longitude: 77.5946
+                  area: "MG Road"
+                  radiusKm: 5.0
+                  maxResults: 15
+      responses:
+        '200':
+          description: Events with intelligent analysis
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventsResponse'
+
+  /api/flutter/alerts:
+    post:
+      tags: [Coordinator System]
+      summary: Alerts Page Handler
+      description: |
+        **Dedicated alerts endpoint** using AlertsPageHandler.
+        Returns predictive alerts with safety guidance.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertsRequest'
+            examples:
+              area_alerts:
+                summary: Area-specific Alerts
+                value:
+                  userId: "user_123"
+                  latitude: 12.9716
+                  longitude: 77.5946
+                  area: "MG Road"
+                  radiusKm: 5.0
+                  maxResults: 10
+      responses:
+        '200':
+          description: Alerts with safety recommendations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertsResponse'
+
+  /api/flutter/report:
+    post:
+      tags: [Coordinator System]
+      summary: Submit User Report
+      description: |
+        **Report submission endpoint** using ReportingPageHandler.
+        Supports multimodal submissions with AI analysis.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  description: Text description of the issue
+                  example: "Large pothole causing traffic delays"
+                latitude:
+                  type: number
+                  format: double
+                  description: Latitude coordinate
+                  example: 12.9716
+                longitude:
+                  type: number
+                  format: double
+                  description: Longitude coordinate
+                  example: 77.5946
+                area:
+                  type: string
+                  description: Area or locality name
+                  example: "MG Road"
+                image:
+                  type: string
+                  format: binary
+                  description: Optional image file
+                video:
+                  type: string
+                  format: binary
+                  description: Optional video file
+                userId:
+                  type: string
+                  description: User identifier
+                  example: "user_123"
+                category:
+                  type: string
+                  description: Report category
+                  example: "INFRASTRUCTURE"
+              required: [description, latitude, longitude, userId]
+      responses:
+        '200':
+          description: Report processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportResponse'
+
+  /api/flutter/dashboard:
+    post:
+      tags: [Coordinator System]
+      summary: Dashboard/Home Data
+      description: |
+        **Dashboard endpoint** using HomePageHandler.
+        Returns summary data for main page with welcome message.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardRequest'
+            examples:
+              dashboard_request:
+                summary: Dashboard Data Request
+                value:
+                  userId: "user_123"
+                  latitude: 12.9716
+                  longitude: 77.5946
+                  area: "MG Road"
+                  radiusKm: 5.0
+                  query: "Show me what's happening in my area"
+      responses:
+        '200':
+          description: Dashboard data with summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardResponse'
+
+  # ============ SPECIALIZED ENDPOINTS ============
+
+  /api/v1/flutter/map/comprehensive:
+    post:
+      tags: [Map & Chat]
+      summary: Comprehensive Map Data
+      description: |
+        **Map visualization data** - Gets events, alerts, and mood data for map display.
+        Perfect for map markers and overlays.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                latitude:
+                  type: number
+                  format: double
+                  example: 12.9716
+                longitude:
+                  type: number
+                  format: double
+                  example: 77.5946
+                area:
+                  type: string
+                  example: "MG Road"
+                radius:
+                  type: number
+                  format: double
+                  example: 10.0
+                maxResults:
+                  type: integer
+                  example: 20
+              required: [latitude, longitude]
+            examples:
+              mg_road_comprehensive:
+                summary: MG Road Area Data
+                value:
+                  latitude: 12.9716
+                  longitude: 77.5946
+                  area: "MG Road"
+                  radius: 5.0
+                  maxResults: 20
+      responses:
+        '200':
+          description: Comprehensive city data for map
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  events:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CityEvent'
+                  alerts:
+                    type: array
+                    items:
+                      type: object
+                  moodData:
+                    type: object
+                  location:
+                    type: object
+                  timestamp:
+                    type: string
+                    format: date-time
+
+  /api/v1/flutter/chat/intelligent:
+    post:
+      tags: [Map & Chat]
+      summary: Intelligent Chat with Map Data
+      description: |
+        **Best of both worlds** - Returns conversational AI responses AND structured map data.
+        Perfect for map page that needs both chat interface and map markers.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  example: "Show me traffic alerts and events near MG Road"
+                userId:
+                  type: string
+                  example: "user_123"
+                latitude:
+                  type: number
+                  format: double
+                  example: 12.9716
+                longitude:
+                  type: number
+                  format: double
+                  example: 77.5946
+                area:
+                  type: string
+                  example: "MG Road"
+              required: [query]
+            examples:
+              traffic_query:
+                summary: Traffic Query with Map Data
+                value:
+                  query: "Show me traffic issues and road closures near MG Road"
+                  userId: "user_123"
+                  latitude: 12.9716
+                  longitude: 77.5946
+                  area: "MG Road"
+              event_query:
+                summary: Events Query with Location
+                value:
+                  query: "What events are happening this weekend in Koramangala?"
+                  userId: "user_123"
+                  latitude: 12.9352
+                  longitude: 77.6245
+                  area: "Koramangala"
+      responses:
+        '200':
+          description: Chat response with structured map data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  chatResponse:
+                    type: string
+                    example: "I found 3 traffic issues and 2 road closures near MG Road. The main problems are on Residency Road and Brigade Road."
+                  mapData:
+                    type: object
+                    properties:
+                      events:
+                        type: array
+                        items:
+                          type: object
+                      alerts:
+                        type: array
+                        items:
+                          type: object
+                      location:
+                        type: object
+                  hasMapData:
+                    type: boolean
+                  query:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+
+  /api/v1/flutter/events/synthesized:
+    post:
+      tags: [Events]
+      summary: AI-Synthesized Events
+      description: |
+        **Clean, AI-processed events** without duplicates.
+        Uses FusionAgent for intelligent deduplication and summarization.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                latitude:
+                  type: number
+                  format: double
+                  example: 12.9352
+                longitude:
+                  type: number
+                  format: double
+                  example: 77.6245
+                area:
+                  type: string
+                  example: "Koramangala"
+                city:
+                  type: string
+                  example: "Bengaluru"
+                maxResults:
+                  type: integer
+                  example: 20
+            examples:
+              koramangala_events:
+                summary: Koramangala Events
+                value:
+                  latitude: 12.9352
+                  longitude: 77.6245
+                  area: "Koramangala"
+                  city: "Bengaluru"
+                  maxResults: 15
+      responses:
+        '200':
+          description: Synthesized events with AI summary
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  synthesizedEvents:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CityEvent'
+                  summary:
+                    type: string
+                  area:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+
+  /api/v1/flutter/alerts/predictive:
+    post:
+      tags: [Alerts]
+      summary: Predictive Alerts
+      description: |
+        **AI-powered predictions** based on current patterns.
+        Analyzes trends to forecast potential issues.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                area:
+                  type: string
+                  example: "Koramangala"
+                city:
+                  type: string
+                  example: "Bengaluru"
+                latitude:
+                  type: number
+                  format: double
+                  example: 12.9352
+                longitude:
+                  type: number
+                  format: double
+                  example: 77.6245
+                category:
+                  type: string
+                  enum: [TRAFFIC, UTILITY, HEALTH, INFRASTRUCTURE, EMERGENCY, COMMUNITY]
+                  example: "TRAFFIC"
+                forecastHours:
+                  type: integer
+                  example: 24
+            examples:
+              traffic_predictions:
+                summary: Traffic Predictions
+                value:
+                  area: "Koramangala"
+                  latitude: 12.9352
+                  longitude: 77.6245
+                  category: "TRAFFIC"
+                  forecastHours: 24
+      responses:
+        '200':
+          description: Predictive alerts and insights
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  predictions:
+                    type: array
+                    items:
+                      type: object
+                  alerts:
+                    type: array
+                    items:
+                      type: object
+                  insights:
+                    type: string
+                  area:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+
+  /api/v1/flutter/reports/submit:
+    post:
+      tags: [Reporting]
+      summary: Submit Multimodal Report
+      description: |
+        **Full-featured report submission** with AI analysis and cloud storage.
+        Supports images, videos, and automatic categorization.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  description: Report description
+                  example: "Large pothole causing vehicle damage"
+                latitude:
+                  type: number
+                  format: double
+                  example: 12.9716
+                longitude:
+                  type: number
+                  format: double
+                  example: 77.5946
+                userId:
+                  type: string
+                  example: "user_123"
+                area:
+                  type: string
+                  example: "MG Road"
+                ttlHours:
+                  type: integer
+                  description: Time-to-live in hours (1-720)
+                  example: 24
+                image:
+                  type: string
+                  format: binary
+                  description: Optional image file
+                video:
+                  type: string
+                  format: binary
+                  description: Optional video file
+              required: [content, latitude, longitude, userId]
+      responses:
+        '200':
+          description: Report processed with AI analysis
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  reportId:
+                    type: string
+                  processedEvent:
+                    type: object
+                  location:
+                    type: object
+                  userTracking:
+                    type: object
+                  timestamp:
+                    type: string
+                    format: date-time
+
+  /api/v1/flutter/reports/history/{userId}:
+    get:
+      tags: [Reporting]
+      summary: Get User Report History
+      description: Get previously submitted reports for a user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "user_123"
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+          example: 10
+      responses:
+        '200':
+          description: User's report history
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  userId:
+                    type: string
+                  reports:
+                    type: array
+                    items:
+                      type: object
+                  total:
+                    type: integer
+                  statistics:
+                    type: object
+                  timestamp:
+                    type: string
+                    format: date-time
+
+  /api/v1/flutter/reports/{reportId}:
+    delete:
+      tags: [Reporting]
+      summary: Delete User Report
+      description: Delete a user's report including media files
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "report_123"
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
+          example: "user_123"
+      responses:
+        '200':
+          description: Report deleted successfully
+        '400':
+          description: Report not found or not owned by user
+
+  # ============ REAL-TIME STREAMS ============
+
+  /api/v1/flutter/stream/events:
+    get:
+      tags: [Streams]
+      summary: Real-time Events Stream
+      description: |
+        **Server-Sent Events** for live city updates.
+        Keep connection open to receive real-time event notifications.
+      responses:
+        '200':
+          description: SSE stream of events
+          content:
+            text/event-stream:
+              schema:
+                type: string
+              example: |
+                data: {"type":"event","data":{"id":"evt_123","title":"Traffic jam on MG Road"}}
+                
+                data: {"type":"event","data":{"id":"evt_124","title":"Water shortage in HSR Layout"}}
+
+  /api/v1/flutter/stream/alerts:
+    get:
+      tags: [Streams]
+      summary: Real-time Alerts Stream
+      description: Server-Sent Events for live alert updates
+      responses:
+        '200':
+          description: SSE stream of alerts
+          content:
+            text/event-stream:
+              schema:
+                type: string
+
+  /api/v1/flutter/stream/mood:
+    get:
+      tags: [Streams]
+      summary: Real-time Mood Updates
+      description: Server-Sent Events for live mood map updates
+      responses:
+        '200':
+          description: SSE stream of mood data
+          content:
+            text/event-stream:
+              schema:
+                type: string
+
+  # ============ UTILITIES ============
+
+  /api/v1/flutter/health:
+    get:
+      tags: [Utilities]
+      summary: System Health Check
+      description: Health status for all agents and services
+      responses:
+        '200':
+          description: System health status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "healthy"
+                  service:
+                    type: string
+                    example: "City Data Overload Server"
+                  version:
+                    type: string
+                    example: "1.0.0"
+                  agents:
+                    type: object
+                  connections:
+                    type: object
+                  timestamp:
+                    type: string
+                    format: date-time
+
+  /api/v1/flutter/bengaluru/areas:
+    get:
+      tags: [Utilities]
+      summary: Get Bengaluru Areas
+      description: List of available areas with coordinates for dropdowns
+      responses:
+        '200':
+          description: List of Bengaluru areas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  areas:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: "Koramangala"
+                        lat:
+                          type: number
+                          format: double
+                          example: 12.9279
+                        lng:
+                          type: number
+                          format: double
+                          example: 77.6271
+                  city:
+                    type: string
+                    example: "Bengaluru"
+                  total:
+                    type: integer
+                  timestamp:
+                    type: string
+                    format: date-time
+
+  /api/v1/flutter/test/bigquery:
+    get:
+      tags: [Utilities]
+      summary: Test BigQuery Connection
+      description: Debug endpoint to test BigQuery data fetching
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+          example: 5
+      responses:
+        '200':
+          description: BigQuery test results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  events_found:
+                    type: integer
+                  events:
+                    type: array
+                    items:
+                      type: object
+                  timestamp:
+                    type: string
+                    format: date-time
+
+  # ============ SERPAPI ENDPOINTS (FIXED!) ============
+  
+  /api/v1/serpapi/fetch/all:
+    post:
+      tags: [Utilities]
+      summary: SerpAPI Data Fetch (All Categories)
+      description: |
+        **✅ FIXED: No more Jackson errors!**
+        
+        Fetches data from all categories using SerpAPI. Handles "no results" gracefully.
+        
+        **Fixes Applied:**
+        - JSON deserialization errors resolved
+        - Graceful handling of "Google hasn't returned any results"
+        - Better error logging and debugging
+      parameters:
+        - name: location
+          in: query
+          schema:
+            type: string
+            default: "Bengaluru, Karnataka, India"
+          example: "Bengaluru, Karnataka, India"
+      responses:
+        '200':
+          description: Data fetch completed
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CityEvent'
+
+  /api/v1/serpapi/fetch/process-store:
+    post:
+      tags: [Utilities]
+      summary: Full AI Pipeline (SYNC - 5min timeout)
+      description: |
+        **✅ FIXED: Timeout and Jackson errors!**
+        
+        Complete pipeline: fetch + AI processing + storage.
+        
+        **Fixes Applied:**
+        - Extended timeout from 30s to 5 minutes
+        - SerpAPI error handling fixed
+        - Better error responses with suggestions
+        
+        **⚠️ Heavy Operation:** Can take 2-5 minutes
+      parameters:
+        - name: location
+          in: query
+          schema:
+            type: string
+            default: "Bengaluru, Karnataka, India"
+          example: "Bengaluru, Karnataka, India"
+      responses:
+        '200':
+          description: Processing completed or error with details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [SUCCESS, ERROR]
+                  location:
+                    type: string
+                  totalEventsFetched:
+                    type: integer
+                  processedEventsStored:
+                    type: integer
+                  timestamp:
+                    type: string
+                    format: date-time
+                  pipeline:
+                    type: string
+                    example: "COMPLETE_AI_PIPELINE"
+                  error:
+                    type: string
+                    description: Error message if failed
+                  suggestion:
+                    type: string
+                    description: Helpful suggestion for users
+
+  /api/v1/serpapi/fetch/process-store/async:
+    post:
+      tags: [Utilities]
+      summary: Full AI Pipeline (ASYNC - Returns immediately)
+      description: |
+        **✅ NEW: Async alternative for UI integrations!**
+        
+        Starts the AI processing pipeline and returns immediately with task ID.
+        Processing continues in background - perfect for web UIs.
+        
+        **Benefits:**
+        - No waiting for user
+        - Immediate response
+        - Background processing
+        - Check logs for completion
+      parameters:
+        - name: location
+          in: query
+          schema:
+            type: string
+            default: "Bengaluru, Karnataka, India"
+          example: "Bengaluru, Karnataka, India"
+      responses:
+        '202':
+          description: Task started successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  taskId:
+                    type: string
+                    example: "task_1753554376209"
+                  status:
+                    type: string
+                    example: "STARTED"
+                  location:
+                    type: string
+                  message:
+                    type: string
+                    example: "AI processing pipeline started. Check logs for progress."
+                  estimatedDuration:
+                    type: string
+                    example: "2-5 minutes"
+                  timestamp:
+                    type: string
+                    format: date-time
+
+  /api/v1/serpapi/test-connection:
+    get:
+      tags: [Utilities]
+      summary: SerpAPI Health Check
+      description: Quick test of SerpAPI connectivity without data processing
+      responses:
+        '200':
+          description: Connection test results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [SUCCESS, ERROR]
+                  message:
+                    type: string
+                  searchMetadata:
+                    type: object
+                  error:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+
+components:
+  schemas:
+    ChatRequest:
+      type: object
+      properties:
+        query:
+          type: string
+          description: User's question or message
+          example: "What's happening in my area today?"
+        page:
+          type: string
+          enum: [home, events, alerts, reporting, chat]
+          description: Flutter page context
+          example: "home"
+        userId:
+          type: string
+          description: User identifier
+          example: "user_123"
+        sessionId:
+          type: string
+          description: Session identifier
+          example: "session_456"
+        latitude:
+          type: number
+          format: double
+          description: User's latitude
+          example: 12.9716
+        longitude:
+          type: number
+          format: double
+          description: User's longitude
+          example: 77.5946
+        area:
+          type: string
+          description: Area or locality name
+          example: "MG Road"
+        radiusKm:
+          type: number
+          format: double
+          description: Search radius in kilometers
+          example: 5.0
+        category:
+          type: string
+          enum: [TRAFFIC, UTILITY, HEALTH, INFRASTRUCTURE, EMERGENCY, COMMUNITY]
+          description: Event category filter
+        severity:
+          type: string
+          enum: [LOW, MEDIUM, HIGH, CRITICAL]
+          description: Severity filter
+        maxResults:
+          type: integer
+          description: Maximum number of results
+          example: 20
+      required: [query]
+
+    EventsRequest:
+      type: object
+      properties:
+        userId:
+          type: string
+          example: "user_123"
+        query:
+          type: string
+          example: "Show me traffic events near Koramangala"
+        latitude:
+          type: number
+          format: double
+          example: 12.9352
+        longitude:
+          type: number
+          format: double
+          example: 77.6245
+        area:
+          type: string
+          example: "Koramangala"
+        radiusKm:
+          type: number
+          format: double
+          example: 3.0
+        category:
+          type: string
+          enum: [TRAFFIC, UTILITY, HEALTH, INFRASTRUCTURE, EMERGENCY, COMMUNITY]
+        severity:
+          type: string
+          enum: [LOW, MEDIUM, HIGH, CRITICAL]
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        maxResults:
+          type: integer
+          example: 20
+
+    AlertsRequest:
+      type: object
+      properties:
+        userId:
+          type: string
+          example: "user_123"
+        query:
+          type: string
+          example: "What alerts should I be aware of?"
+        latitude:
+          type: number
+          format: double
+          example: 12.9716
+        longitude:
+          type: number
+          format: double
+          example: 77.5946
+        area:
+          type: string
+          example: "MG Road"
+        radiusKm:
+          type: number
+          format: double
+          example: 5.0
+        maxResults:
+          type: integer
+          example: 10
+
+    DashboardRequest:
+      type: object
+      properties:
+        userId:
+          type: string
+          example: "user_123"
+        query:
+          type: string
+          example: "Show me what's happening in my area"
+        latitude:
+          type: number
+          format: double
+          example: 12.9716
+        longitude:
+          type: number
+          format: double
+          example: 77.5946
+        area:
+          type: string
+          example: "MG Road"
+        radiusKm:
+          type: number
+          format: double
+          example: 5.0
+
+    CityEvent:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "evt_123"
+        title:
+          type: string
+          example: "Traffic jam on MG Road"
+        description:
+          type: string
+          example: "Heavy traffic reported due to road construction"
+        category:
+          type: string
+          enum: [TRAFFIC, UTILITY, HEALTH, INFRASTRUCTURE, EMERGENCY, COMMUNITY]
+        severity:
+          type: string
+          enum: [LOW, MEDIUM, HIGH, CRITICAL]
+        location:
+          type: object
+          properties:
+            latitude:
+              type: number
+              format: double
+            longitude:
+              type: number
+              format: double
+            area:
+              type: string
+        timestamp:
+          type: string
+          format: date-time
+        aiSummary:
+          type: string
+          description: AI-generated summary
+        confidenceScore:
+          type: number
+          format: double
+          description: AI confidence (0.0-1.0)
+
+    UnifiedResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+          description: Chat response from AI
+        timestamp:
+          type: string
+          format: date-time
+        request_id:
+          type: string
+        page:
+          type: string
+          description: Page context
+        # Dynamic fields based on page type
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/CityEvent'
+        alerts:
+          type: array
+          items:
+            type: object
+        summary:
+          type: object
+        quick_actions:
+          type: array
+          items:
+            type: string
+
+    EventsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        page:
+          type: string
+          example: "events"
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/CityEvent'
+        total_count:
+          type: integer
+        filters_applied:
+          type: object
+        search_suggestions:
+          type: array
+          items:
+            type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    AlertsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        page:
+          type: string
+          example: "alerts"
+        alerts:
+          type: array
+          items:
+            type: object
+        severity_summary:
+          type: object
+        location_summary:
+          type: object
+        safety_tips:
+          type: array
+          items:
+            type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    ReportResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        page:
+          type: string
+          example: "reporting"
+        submission_status:
+          type: string
+          enum: [success, failed]
+        report_id:
+          type: string
+        estimated_category:
+          type: string
+        next_steps:
+          type: array
+          items:
+            type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    DashboardResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        page:
+          type: string
+          example: "home"
+        summary:
+          type: object
+          properties:
+            total_events:
+              type: integer
+            active_alerts:
+              type: integer
+            last_updated:
+              type: string
+              format: date-time
+        recent_events:
+          type: array
+          items:
+            $ref: '#/components/schemas/CityEvent'
+        recent_alerts:
+          type: array
+          items:
+            type: object
+        quick_actions:
+          type: array
+          items:
+            type: string
+        timestamp:
+          type: string
+          format: date-time
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+security:
+  - ApiKeyAuth: []
+  - BearerAuth: []
+  - {} # No authentication (for testing) 

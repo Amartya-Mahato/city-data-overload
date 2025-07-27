@@ -1,0 +1,206 @@
+{
+  "events": [
+    {
+      "eventId": "evt001",
+      "eventType": "Traffic Jam",
+      "severity": "Medium",
+      "location": {
+        "lat": 12.9716,
+        "lng": 77.5946,
+        "address": "MG Road, Bengaluru"
+      },
+      "mediaURL": "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400",
+      "timestamp": "2025-07-18T10:30:00Z",
+      "summary": "Heavy traffic congestion on MG Road due to construction work",
+      "description": "Major traffic jam reported at MG Road junction. Expected delay of 30-45 minutes.",
+      "reportedBy": "CitizenAlert",
+      "category": "Traffic",
+      "impactRadius": 2.5
+    },
+    {
+      "eventId": "evt002",
+      "eventType": "Flood",
+      "severity": "High",
+      "location": {
+        "lat": 12.9352,
+        "lng": 77.6245,
+        "address": "Koramangala, Bengaluru"
+      },
+      "mediaURL": "https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=400",
+      "timestamp": "2025-07-18T09:15:00Z",
+      "summary": "Waterlogging in Koramangala due to heavy rainfall",
+      "description": "Severe waterlogging reported in Koramangala area. Roads are impassable.",
+      "reportedBy": "Emergency Services",
+      "category": "Emergency",
+      "impactRadius": 3.0
+    },
+    {
+      "eventId": "evt003",
+      "eventType": "Road Closure",
+      "severity": "High",
+      "location": {
+        "lat": 12.9698,
+        "lng": 77.7500,
+        "address": "Whitefield, Bengaluru"
+      },
+      "mediaURL": "https://images.unsplash.com/photo-1572021335469-31706a17aaef?w=400",
+      "timestamp": "2025-07-18T08:00:00Z",
+      "summary": "Road closure on Whitefield Main Road for emergency repairs",
+      "description": "Complete road closure due to gas leak repair. Alternative routes suggested.",
+      "reportedBy": "BBMP",
+      "category": "Infrastructure",
+      "impactRadius": 1.5
+    },
+    {
+      "eventId": "evt004",
+      "eventType": "Thunderstorm",
+      "severity": "Medium",
+      "location": {
+        "lat": 13.0827,
+        "lng": 77.5877,
+        "address": "Hebbal, Bengaluru"
+      },
+      "mediaURL": "https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?w=400",
+      "timestamp": "2025-07-18T11:45:00Z",
+      "summary": "Thunderstorm warning for North Bengaluru",
+      "description": "Moderate thunderstorm with lightning activity expected in next 2 hours.",
+      "reportedBy": "Weather Department",
+      "category": "Weather",
+      "impactRadius": 5.0
+    },
+    {
+      "eventId": "evt005",
+      "eventType": "Earthquake",
+      "severity": "Low",
+      "location": {
+        "lat": 12.9141,
+        "lng": 77.6101,
+        "address": "BTM Layout, Bengaluru"
+      },
+      "mediaURL": "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=400",
+      "timestamp": "2025-07-18T07:20:00Z",
+      "summary": "Minor earthquake tremors felt in South Bengaluru",
+      "description": "Magnitude 3.2 earthquake recorded. No damage reported.",
+      "reportedBy": "Seismic Department",
+      "category": "Emergency",
+      "impactRadius": 10.0
+    },
+    {
+      "eventId": "evt006",
+      "eventType": "Power Outage",
+      "severity": "Medium",
+      "location": {
+        "lat": 12.9279,
+        "lng": 77.6271,
+        "address": "HSR Layout, Bengaluru"
+      },
+      "mediaURL": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400",
+      "timestamp": "2025-07-18T12:00:00Z",
+      "summary": "Power outage affecting HSR Layout area",
+      "description": "Scheduled maintenance causing power outage. Expected restoration in 3 hours.",
+      "reportedBy": "BESCOM",
+      "category": "Utilities",
+      "impactRadius": 2.0
+    },
+    {
+      "eventId": "evt007",
+      "eventType": "Fire",
+      "severity": "High",
+      "location": {
+        "lat": 12.9350,
+        "lng": 77.6200,
+        "address": "Indiranagar, Bengaluru"
+      },
+      "mediaURL": "https://images.unsplash.com/photo-1574672281441-b5d89b3b2d3a?w=400",
+      "timestamp": "2025-07-18T13:30:00Z",
+      "summary": "Building fire reported in Indiranagar",
+      "description": "Fire reported in commercial building. Fire department en route.",
+      "reportedBy": "Fire Department",
+      "category": "Emergency",
+      "impactRadius": 1.0
+    },
+    {
+      "eventId": "evt008",
+      "eventType": "Rain",
+      "severity": "Low",
+      "location": {
+        "lat": 12.9800,
+        "lng": 77.5900,
+        "address": "Malleswaram, Bengaluru"
+      },
+      "mediaURL": "https://images.unsplash.com/photo-1519692933481-e162a57d6721?w=400",
+      "timestamp": "2025-07-18T14:00:00Z",
+      "summary": "Light rain showers in North Bengaluru",
+      "description": "Pleasant light rain showers providing relief from heat.",
+      "reportedBy": "Weather Department",
+      "category": "Weather",
+      "impactRadius": 4.0
+    },
+    {
+      "eventId": "evt009",
+      "eventType": "Thunder",
+      "severity": "Medium",
+      "location": {
+        "lat": 12.9200,
+        "lng": 77.6400,
+        "address": "Electronic City, Bengaluru"
+      },
+      "mediaURL": "https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?w=400",
+      "timestamp": "2025-07-18T15:15:00Z",
+      "summary": "Thunder and lightning activity in South Bengaluru",
+      "description": "Moderate thunder and lightning expected for next hour.",
+      "reportedBy": "Weather Department",
+      "category": "Weather",
+      "impactRadius": 3.5
+    }
+  ],
+  "user": {
+    "userId": "user123",
+    "name": "Rajesh Kumar",
+    "email": "rajesh.kumar@example.com",
+    "location": {
+      "lat": 12.9716,
+      "lng": 77.5946
+    },
+    "preferences": {
+      "alertRadius": 5.0,
+      "categories": ["Traffic", "Emergency", "Weather"],
+      "notificationEnabled": true,
+      "darkMode": false
+    },
+    "reputation": 85,
+    "reportsSubmitted": 12
+  },
+  "categories": [
+    {
+      "id": "traffic",
+      "name": "Traffic",
+      "icon": "traffic_light",
+      "color": "#FF9800"
+    },
+    {
+      "id": "emergency",
+      "name": "Emergency",
+      "icon": "emergency",
+      "color": "#F44336"
+    },
+    {
+      "id": "weather",
+      "name": "Weather",
+      "icon": "weather",
+      "color": "#2196F3"
+    },
+    {
+      "id": "infrastructure",
+      "name": "Infrastructure",
+      "icon": "construction",
+      "color": "#9C27B0"
+    },
+    {
+      "id": "utilities",
+      "name": "Utilities",
+      "icon": "power",
+      "color": "#607D8B"
+    }
+  ]
+}

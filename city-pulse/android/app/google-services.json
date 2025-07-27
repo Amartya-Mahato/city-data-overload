@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "114515649416",
+    "project_id": "galvanized-sled-466307-q6",
+    "storage_bucket": "galvanized-sled-466307-q6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:114515649416:android:629eb260e1effc4c22d03d",
+        "android_client_info": {
+          "package_name": "com.bengaluru.citypulse.bengaluru_city_pulse"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "114515649416-no3jasi4jon9mi5cpqbqvo6qg6o41h05.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bengaluru.citypulse.bengaluru_city_pulse",
+            "certificate_hash": "f9ba6c90a7cfe2e3ff51a647fe5232a03e592713"
+          }
+        },
+        {
+          "client_id": "114515649416-bnd0p5175ok7t21c8dc287cip36ispf5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDM7253o5Nh7XgEZGwLeTC4pvNGnd4bImg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "114515649416-bnd0p5175ok7t21c8dc287cip36ispf5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "114515649416-3rddj3hvoacpdu8tgcdsesrga1i7tprj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.bengaluru.citypulse.bengaluruCityPulse"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

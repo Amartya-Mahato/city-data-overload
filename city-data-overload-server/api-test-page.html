@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Data Overload - API Tester</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            background: white; 
+            border-radius: 15px; 
+            padding: 30px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        h1 { 
+            text-align: center; 
+            color: #4A90E2; 
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        .test-section { 
+            margin-bottom: 25px; 
+            border: 1px solid #e0e0e0; 
+            border-radius: 10px; 
+            padding: 20px;
+            background: #fafafa;
+        }
+        .test-section h3 { 
+            margin-top: 0; 
+            color: #2c3e50;
+            border-bottom: 2px solid #4A90E2;
+            padding-bottom: 10px;
+        }
+        button { 
+            background: linear-gradient(45deg, #4A90E2, #5cb3cc);
+            color: white; 
+            border: none; 
+            padding: 12px 25px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            margin: 5px; 
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        button:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4);
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .loading {
+            background: #f39c12 !important;
+        }
+        textarea { 
+            width: 100%; 
+            height: 200px; 
+            margin: 10px 0; 
+            padding: 15px; 
+            border: 1px solid #ddd; 
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            background: #f8f9fa;
+        }
+        input { 
+            padding: 10px; 
+            margin: 5px; 
+            border: 1px solid #ddd; 
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .response { 
+            background: #f8f9fa; 
+            border: 1px solid #e0e0e0; 
+            border-radius: 6px; 
+            padding: 15px; 
+            margin-top: 10px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .success { background-color: #d4edda; border-color: #c3e6cb; color: #155724; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .status-green { background-color: #28a745; }
+        .status-red { background-color: #dc3545; }
+        .status-yellow { background-color: #ffc107; }
+        .quick-tests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .coordinates {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .coordinates input {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏙️ City Data Overload API Tester</h1>
+        <p class="subtitle">Test all endpoints for the Bengaluru City Data Challenge</p>
+
+        <!-- Quick Tests -->
+        <div class="test-section">
+            <h3>🚀 Quick Tests</h3>
+            <div class="quick-tests">
+                <button onclick="testHealth()">Health Check</button>
+                <button onclick="testBigQuery()">Test BigQuery</button>
+                <button onclick="testAreas()">Get Areas</button>
+                <button onclick="testMapData()">Map Data</button>
+                <button onclick="testIntelligentChat()">Intelligent Chat</button>
+            </div>
+            <div id="quickResponse" class="response" style="display:none;"></div>
+        </div>
+
+        <!-- Intelligent Chat Test -->
+        <div class="test-section">
+            <h3>💬 Intelligent Chat with Map Data</h3>
+            <input type="text" id="chatQuery" placeholder="Ask about events, alerts, mood..." 
+                   value="Show me traffic alerts and events near MG Road" style="width: 60%;">
+            <div class="coordinates">
+                <input type="number" id="chatLat" placeholder="Latitude" value="12.9716" step="0.0001">
+                <input type="number" id="chatLng" placeholder="Longitude" value="77.5946" step="0.0001">
+                <input type="text" id="chatArea" placeholder="Area" value="MG Road">
+            </div>
+            <button onclick="testCustomChat()">Send Chat</button>
+            <button onclick="testTrafficQuery()">Traffic Query</button>
+            <button onclick="testEmergencyQuery()">Emergency Query</button>
+            <button onclick="testMoodQuery()">Mood Query</button>
+            <div id="chatResponse" class="response" style="display:none;"></div>
+        </div>
+
+        <!-- Citizen Reports -->
+        <div class="test-section">
+            <h3>📝 Citizen Reports</h3>
+            <textarea id="reportContent" placeholder="Describe the issue...">Traffic jam due to construction work on Hosur Road near Electronic City</textarea>
+            <div class="coordinates">
+                <input type="number" id="reportLat" placeholder="Latitude" value="12.8456" step="0.0001">
+                <input type="number" id="reportLng" placeholder="Longitude" value="77.6603" step="0.0001">
+                <input type="text" id="reportArea" placeholder="Area" value="Electronic City">
+                <input type="text" id="reportUserId" placeholder="User ID" value="test-user-456">
+                <input type="number" id="reportTtl" placeholder="TTL Hours" value="24" min="1" max="720">
+            </div>
+            <button onclick="submitReport()">Submit Report</button>
+            <button onclick="getUserHistory()">Get User History</button>
+            <div id="reportResponse" class="response" style="display:none;"></div>
+        </div>
+
+        <!-- Agent Specific Tests -->
+        <div class="test-section">
+            <h3>🤖 Agent Specific Tests</h3>
+            <button onclick="testEvents()">Events Agent</button>
+            <button onclick="testAlerts()">Alerts Agent</button>
+            <button onclick="testMoodMap()">Mood Map Agent</button>
+            <button onclick="testPredictive()">Predictive Agent</button>
+            <button onclick="testFusion()">Fusion Agent</button>
+            <div id="agentResponse" class="response" style="display:none;"></div>
+        </div>
+
+        <!-- Location Tests -->
+        <div class="test-section">
+            <h3>📍 Location-Based Tests</h3>
+            <select id="locationSelect" onchange="updateLocation()">
+                <option value="12.9716,77.5946,MG Road">MG Road</option>
+                <option value="12.9352,77.6245,Koramangala">Koramangala</option>
+                <option value="12.9082,77.6476,HSR Layout">HSR Layout</option>
+                <option value="12.9784,77.6408,Indiranagar">Indiranagar</option>
+                <option value="12.9698,77.7500,Whitefield">Whitefield</option>
+                <option value="12.8456,77.6603,Electronic City">Electronic City</option>
+            </select>
+            <button onclick="testLocationData()">Test Location Data</button>
+            <button onclick="testLocationChat()">Chat for Location</button>
+            <div id="locationResponse" class="response" style="display:none;"></div>
+        </div>
+
+        <!-- Server Logs -->
+        <div class="test-section">
+            <h3>📊 Test Results Summary</h3>
+            <div id="testSummary">
+                <p>🔄 Run tests to see results...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const baseUrl = 'http://localhost:8080';
+        const testResults = [];
+
+        function addTestResult(name, success, response) {
+            testResults.push({ name, success, response, timestamp: new Date() });
+            updateTestSummary();
+        }
+
+        function updateTestSummary() {
+            const summary = document.getElementById('testSummary');
+            const total = testResults.length;
+            const successful = testResults.filter(r => r.success).length;
+            const failed = total - successful;
+
+            summary.innerHTML = `
+                <p><span class="status-indicator ${total > 0 ? 'status-green' : 'status-yellow'}"></span>
+                Total Tests: ${total} | ✅ Successful: ${successful} | ❌ Failed: ${failed}</p>
+                ${testResults.slice(-5).reverse().map(r => 
+                    `<p><span class="status-indicator ${r.success ? 'status-green' : 'status-red'}"></span>
+                    ${r.name}: ${r.success ? '✅' : '❌'} (${r.timestamp.toLocaleTimeString()})</p>`
+                ).join('')}
+            `;
+        }
+
+        async function makeRequest(url, options = {}, responseElementId, testName) {
+            const responseElement = document.getElementById(responseElementId);
+            responseElement.style.display = 'block';
+            responseElement.textContent = '🔄 Loading...';
+            responseElement.className = 'response loading';
+
+            try {
+                const response = await fetch(url, {
+                    headers: { 'Content-Type': 'application/json' },
+                    ...options
+                });
+
+                const data = await response.text();
+                let formattedData;
+                
+                try {
+                    formattedData = JSON.stringify(JSON.parse(data), null, 2);
+                } catch {
+                    formattedData = data;
+                }
+
+                responseElement.textContent = `Status: ${response.status}\n\n${formattedData}`;
+                responseElement.className = response.ok ? 'response success' : 'response error';
+                
+                addTestResult(testName, response.ok, formattedData.substring(0, 100));
+                
+            } catch (error) {
+                responseElement.textContent = `Error: ${error.message}`;
+                responseElement.className = 'response error';
+                addTestResult(testName, false, error.message);
+            }
+        }
+
+        function testHealth() {
+            makeRequest(`${baseUrl}/api/v1/flutter/health`, {}, 'quickResponse', 'Health Check');
+        }
+
+        function testBigQuery() {
+            makeRequest(`${baseUrl}/api/v1/flutter/test/bigquery?limit=5`, {}, 'quickResponse', 'BigQuery Test');
+        }
+
+        function testAreas() {
+            makeRequest(`${baseUrl}/api/v1/flutter/bengaluru/areas`, {}, 'quickResponse', 'Get Areas');
+        }
+
+        function testMapData() {
+            const payload = {
+                latitude: 12.9716,
+                longitude: 77.5946,
+                area: "MG Road",
+                radiusKm: 5.0,
+                maxResults: 20
+            };
+            makeRequest(`${baseUrl}/api/v1/flutter/map/comprehensive`, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            }, 'quickResponse', 'Map Data');
+        }
+
+        function testIntelligentChat() {
+            const payload = {
+                query: "Show me latest events and alerts",
+                latitude: 12.9716,
+                longitude: 77.5946,
+                area: "MG Road",
+                userId: "test-user-123"
+            };
+            makeRequest(`${baseUrl}/api/v1/flutter/chat/intelligent`, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            }, 'quickResponse', 'Intelligent Chat');
+        }
+
+        function testCustomChat() {
+            const payload = {
+                query: document.getElementById('chatQuery').value,
+                latitude: parseFloat(document.getElementById('chatLat').value),
+                longitude: parseFloat(document.getElementById('chatLng').value),
+                area: document.getElementById('chatArea').value,
+                userId: "test-user-123"
+            };
+            makeRequest(`${baseUrl}/api/v1/flutter/chat/intelligent`, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            }, 'chatResponse', 'Custom Chat');
+        }
+
+        function testTrafficQuery() {
+            document.getElementById('chatQuery').value = "Show me all traffic alerts and road conditions";
+            testCustomChat();
+        }
+
+        function testEmergencyQuery() {
+            document.getElementById('chatQuery').value = "Are there any emergency alerts or critical situations?";
+            testCustomChat();
+        }
+
+        function testMoodQuery() {
+            document.getElementById('chatQuery').value = "What's the general mood and sentiment in this area?";
+            testCustomChat();
+        }
+
+        function submitReport() {
+            const payload = {
+                userId: document.getElementById('reportUserId').value,
+                content: document.getElementById('reportContent').value,
+                latitude: parseFloat(document.getElementById('reportLat').value),
+                longitude: parseFloat(document.getElementById('reportLng').value),
+                area: document.getElementById('reportArea').value,
+                ttlHours: parseInt(document.getElementById('reportTtl').value)
+            };
+            makeRequest(`${baseUrl}/api/v1/flutter/reports/submit`, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            }, 'reportResponse', 'Submit Report');
+        }
+
+        function getUserHistory() {
+            const userId = document.getElementById('reportUserId').value;
+            makeRequest(`${baseUrl}/api/v1/flutter/reports/history/${userId}?limit=10`, {}, 'reportResponse', 'User History');
+        }
+
+        function testEvents() {
+            const payload = {
+                latitude: 12.9716,
+                longitude: 77.5946,
+                area: "MG Road",
+                radiusKm: 5.0,
+                maxResults: 15
+            };
+            makeRequest(`${baseUrl}/api/v1/flutter/events/synthesized`, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            }, 'agentResponse', 'Events Agent');
+        }
+
+        function testAlerts() {
+            const payload = {
+                area: "MG Road",
+                latitude: 12.9716,
+                longitude: 77.5946,
+                forecastHours: 24
+            };
+            makeRequest(`${baseUrl}/api/v1/flutter/alerts/predictive`, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            }, 'agentResponse', 'Alerts Agent');
+        }
+
+        function testMoodMap() {
+            const payload = {
+                areas: ["Koramangala", "MG Road", "HSR Layout", "Indiranagar"],
+                timeframe: "24h"
+            };
+            makeRequest(`${baseUrl}/api/v1/flutter/map/mood`, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            }, 'agentResponse', 'Mood Map Agent');
+        }
+
+        function testPredictive() {
+            const payload = {
+                area: "MG Road",
+                latitude: 12.9716,
+                longitude: 77.5946,
+                forecastHours: 24
+            };
+            makeRequest(`${baseUrl}/api/v1/flutter/alerts/predictive`, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            }, 'agentResponse', 'Predictive Agent');
+        }
+
+        function testFusion() {
+            const payload = {
+                latitude: 12.9716,
+                longitude: 77.5946,
+                area: "MG Road",
+                radiusKm: 5.0,
+                maxResults: 15
+            };
+            makeRequest(`${baseUrl}/api/v1/flutter/events/synthesized`, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            }, 'agentResponse', 'Fusion Agent');
+        }
+
+        function updateLocation() {
+            const selected = document.getElementById('locationSelect').value.split(',');
+            document.getElementById('chatLat').value = selected[0];
+            document.getElementById('chatLng').value = selected[1];
+            document.getElementById('chatArea').value = selected[2];
+        }
+
+        function testLocationData() {
+            const selected = document.getElementById('locationSelect').value.split(',');
+            const payload = {
+                latitude: parseFloat(selected[0]),
+                longitude: parseFloat(selected[1]),
+                area: selected[2],
+                radiusKm: 5.0,
+                maxResults: 20
+            };
+            makeRequest(`${baseUrl}/api/v1/flutter/map/comprehensive`, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            }, 'locationResponse', `Location Data: ${selected[2]}`);
+        }
+
+        function testLocationChat() {
+            const selected = document.getElementById('locationSelect').value.split(',');
+            const payload = {
+                query: `What's happening in ${selected[2]}? Show me events and alerts.`,
+                latitude: parseFloat(selected[0]),
+                longitude: parseFloat(selected[1]),
+                area: selected[2],
+                userId: "test-user-123"
+            };
+            makeRequest(`${baseUrl}/api/v1/flutter/chat/intelligent`, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            }, 'locationResponse', `Location Chat: ${selected[2]}`);
+        }
+
+        // Initialize
+        updateTestSummary();
+    </script>
+</body>
+</html> 

@@ -1,0 +1,254 @@
+  # ===================================================================
+# City Data Overload Server Configuration
+# Intelligent backend for Bengaluru city data management using Google AI
+# ===================================================================
+
+spring:
+  application:
+    name: city-data-overload-server
+    description: Google AI-powered backend for managing Bengaluru city data overload
+  profiles:
+    active: dev
+  
+  # Jackson Configuration
+  jackson:
+    serialization:
+      indent_output: true
+      write-dates-as-timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
+    property-naming-strategy: SNAKE_CASE
+  
+  # Redis Configuration (for caching)
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      database: 0
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: -1ms
+  
+  # Cache Configuration
+  cache:
+    type: redis
+    redis:
+      time-to-live: 600000
+      cache-null-values: false
+  
+  # Multipart Configuration (for file uploads)
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 0
+      max-file-size: 100MB
+      max-request-size: 100MB
+      
+  # Async Configuration for Long-Running Operations
+  mvc:
+    async:
+      request-timeout: 300000  # 5 minutes for AI processing operations
+
+# ===================================================================
+# SerpApi Configuration
+# Configuration for search data fetching via SerpApi
+# ===================================================================
+serpapi:
+  api-key: ${SERPAPI_API_KEY:9d6049ca7c97f1c48f06deaebf7f3a999fb2d8129157cfdd2f978e756360d93a}
+  default-location: "Bengaluru, Karnataka, India"
+  default-language: "en"
+  default-country: "in"
+  max-results: 10
+  timeout-ms: 10000
+  
+  # Search engine specific configurations
+  google:
+    domain: "google.co.in"
+    safe-search: false
+    date-range: "d"  # Last day
+    
+  news:
+    sort-by: "date"
+    time-range: "24h"
+    include-duplicates: false
+    
+  # Scheduler configuration
+  scheduler:
+    enabled: ${SERPAPI_SCHEDULER_ENABLED:false}
+    high-priority-interval: 900000    # 15 minutes
+    standard-interval: 3600000        # 1 hour
+    health-check-interval: 1800000    # 30 minutes
+    emergency-monitoring-interval: 300000  # 5 minutes
+    
+    # Time window settings to prevent duplicate fetches (in minutes)
+    time-windows:
+      high-priority: 10        # High priority locations - 10 minutes window
+      standard: 45             # Standard locations - 45 minutes window  
+      emergency-monitoring: 3  # Emergency monitoring - 3 minutes window
+      health-check: 25         # Health check - 25 minutes window
+  
+  # Scheduling Configuration
+  task:
+    scheduling:
+      pool:
+        size: 10
+    execution:
+      pool:
+        core-size: 10
+        max-size: 20
+        queue-capacity: 100
+
+# Server Configuration
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,application/javascript,application/json
+    min-response-size: 1024
+  error:
+    include-stacktrace: never
+    include-message: always
+
+# Google Cloud Configuration
+gcp:
+  project-id: ${GCP_PROJECT_ID:galvanized-sled-466307-q6}
+  location: ${GCP_LOCATION:us-central1}
+  credentials-path: ${GOOGLE_APPLICATION_CREDENTIALS:service-account-key.json}
+  vertex-ai:
+    endpoint: ${VERTEX_AI_ENDPOINT:us-central1-aiplatform.googleapis.com}
+    text-model-name: ${VERTEX_AI_TEXT_MODEL:gemini-2.5-flash}
+    vision-model-name: ${VERTEX_AI_VISION_MODEL:gemini-2.5-flash}
+  storage:
+    bucket-name: ${GCP_STORAGE_BUCKET:city-data-storage}
+
+# Bengaluru Specific Configuration
+bengaluru:
+  coordinates:
+    center:
+      latitude: 12.9716
+      longitude: 77.5946
+    bounds:
+      north: 13.1394
+      south: 12.8344
+      east: 77.7814
+      west: 77.4909
+  areas:
+    - name: "Koramangala"
+      coordinates: { lat: 12.9279, lng: 77.6271 }
+    - name: "HSR Layout"
+      coordinates: { lat: 12.9082, lng: 77.6476 }
+    - name: "Indiranagar"
+      coordinates: { lat: 12.9784, lng: 77.6408 }
+    - name: "Whitefield"
+      coordinates: { lat: 12.9698, lng: 77.7500 }
+    - name: "Electronic City"
+      coordinates: { lat: 12.8456, lng: 77.6603 }
+    - name: "Marathahalli"
+      coordinates: { lat: 12.9591, lng: 77.6974 }
+    - name: "Bellandur"
+      coordinates: { lat: 12.9165, lng: 77.6761 }
+    - name: "Sarjapur"
+      coordinates: { lat: 12.8797, lng: 77.6762 }
+  keywords:
+    - "Bengaluru"
+    - "Bangalore"
+    - "Namma Bengaluru"
+    - "Koramangala"
+    - "HSR Layout"
+    - "Indiranagar"
+    - "Whitefield"
+    - "Electronic City"
+    - "Marathahalli"
+    - "Bellandur"
+    - "Sarjapur"
+
+# AI Processing Configuration
+ai-processing:
+  similarity-threshold: 0.8
+  batch-size: 10
+  max-retry-attempts: 3
+  timeout-seconds: 30
+  categories:
+    - TRAFFIC
+    - CIVIC_ISSUE
+    - CULTURAL_EVENT
+    - EMERGENCY
+    - INFRASTRUCTURE
+    - WEATHER
+    - COMMUNITY
+  sentiment:
+    confidence-threshold: 0.7
+  deduplication:
+    enabled: true
+    time-window-minutes: 60
+    radius-meters: 1000
+
+# Event Expiration Configuration (TTL for Firestore)
+event-expiration:
+  traffic: 2h
+  civic-issue: 30d
+  cultural-event: 1d
+  emergency: 24h
+  infrastructure: 15d
+  weather: 6h
+  community: 7d
+
+# Logging Configuration
+logging:
+  level:
+    com.lemillion.city_data_overload_server: DEBUG
+    org.springframework.web: INFO
+    com.google.cloud: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+  file:
+    name: logs/city-data-overload.log
+    max-size: 10MB
+    max-history: 30
+
+# Management Configuration (Health checks)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+  health:
+    redis:
+      enabled: true
+
+# Resilience4j Configuration
+resilience4j:
+  circuitbreaker:
+    instances:
+      vertex-ai:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 60
+        wait-duration-in-open-state: 60s
+        permitted-number-of-calls-in-half-open-state: 2
+      external-api:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 3
+  retry:
+    instances:
+      ai-processing:
+        max-attempts: 3
+        wait-duration: 2s
+      external-api:
+        max-attempts: 3
+        wait-duration: 1s

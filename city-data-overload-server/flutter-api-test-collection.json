@@ -1,0 +1,733 @@
+{
+  "info": {
+    "name": "City Data Overload - Flutter API Tests",
+    "description": "Comprehensive test collection for Flutter mobile app endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "test_user_{{$randomUUID}}",
+      "type": "string"
+    },
+    {
+      "key": "sessionId",
+      "value": "session_{{$randomUUID}}",
+      "type": "string"
+    },
+    {
+      "key": "mg_road_lat",
+      "value": "12.9716",
+      "type": "string"
+    },
+    {
+      "key": "mg_road_lng",
+      "value": "77.5946",
+      "type": "string"
+    },
+    {
+      "key": "koramangala_lat",
+      "value": "12.9352",
+      "type": "string"
+    },
+    {
+      "key": "koramangala_lng",
+      "value": "77.6245",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "🤖 Coordinator System (Recommended)",
+      "item": [
+        {
+          "name": "🏠 Home Page Chat",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"What's happening in my area today?\",\n  \"page\": \"home\",\n  \"userId\": \"{{userId}}\",\n  \"latitude\": {{mg_road_lat}},\n  \"longitude\": {{mg_road_lng}},\n  \"area\": \"MG Road\",\n  \"radiusKm\": 5.0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/flutter/chat",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "flutter", "chat"]
+            },
+            "description": "Test home page dashboard with conversational AI"
+          },
+          "response": []
+        },
+        {
+          "name": "📅 Events Page Query",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"Show me traffic events near Koramangala\",\n  \"page\": \"events\",\n  \"userId\": \"{{userId}}\",\n  \"latitude\": {{koramangala_lat}},\n  \"longitude\": {{koramangala_lng}},\n  \"area\": \"Koramangala\",\n  \"category\": \"TRAFFIC\",\n  \"maxResults\": 15\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/flutter/chat",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "flutter", "chat"]
+            },
+            "description": "Test events page with traffic-specific query"
+          },
+          "response": []
+        },
+        {
+          "name": "🚨 Alerts Page Question",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"Are there any emergency alerts I should know about?\",\n  \"page\": \"alerts\",\n  \"userId\": \"{{userId}}\",\n  \"latitude\": {{mg_road_lat}},\n  \"longitude\": {{mg_road_lng}},\n  \"area\": \"MG Road\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/flutter/chat",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "flutter", "chat"]
+            },
+            "description": "Test alerts page with safety question"
+          },
+          "response": []
+        },
+        {
+          "name": "💬 General Chat",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"How do I report a water shortage in my area?\",\n  \"page\": \"chat\",\n  \"userId\": \"{{userId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/flutter/chat",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "flutter", "chat"]
+            },
+            "description": "Test general conversational chat"
+          },
+          "response": []
+        },
+        {
+          "name": "📅 Dedicated Events Endpoint",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"latitude\": {{koramangala_lat}},\n  \"longitude\": {{koramangala_lng}},\n  \"area\": \"Koramangala\",\n  \"radiusKm\": 3.0,\n  \"category\": \"TRAFFIC\",\n  \"maxResults\": 20\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/flutter/events",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "flutter", "events"]
+            },
+            "description": "Test dedicated events endpoint with filtering"
+          },
+          "response": []
+        },
+        {
+          "name": "🚨 Dedicated Alerts Endpoint",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"latitude\": {{mg_road_lat}},\n  \"longitude\": {{mg_road_lng}},\n  \"area\": \"MG Road\",\n  \"radiusKm\": 5.0,\n  \"maxResults\": 10\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/flutter/alerts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "flutter", "alerts"]
+            },
+            "description": "Test dedicated alerts endpoint"
+          },
+          "response": []
+        },
+        {
+          "name": "🏠 Dashboard Data",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"latitude\": {{mg_road_lat}},\n  \"longitude\": {{mg_road_lng}},\n  \"area\": \"MG Road\",\n  \"radiusKm\": 5.0,\n  \"query\": \"Show me what's happening in my area\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/flutter/dashboard",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "flutter", "dashboard"]
+            },
+            "description": "Test dashboard/home page data"
+          },
+          "response": []
+        }
+      ],
+      "description": "New dynamic routing system using CoordinatorAgent"
+    },
+    {
+      "name": "🗺️ Map & Chat Endpoints",
+      "item": [
+        {
+          "name": "🌍 Comprehensive Map Data",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"latitude\": {{mg_road_lat}},\n  \"longitude\": {{mg_road_lng}},\n  \"area\": \"MG Road\",\n  \"radius\": 5.0,\n  \"maxResults\": 20\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/flutter/map/comprehensive",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "flutter", "map", "comprehensive"]
+            },
+            "description": "Get all map data: events, alerts, mood for visualization"
+          },
+          "response": []
+        },
+        {
+          "name": "🤖 Simple Chat Query",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"What's happening in Bengaluru today?\",\n  \"userId\": \"{{userId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/flutter/chat/query",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "flutter", "chat", "query"]
+            },
+            "description": "Basic AI chat without location context"
+          },
+          "response": []
+        },
+        {
+          "name": "🧠 Intelligent Chat + Map Data",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"Show me traffic issues and road closures near MG Road\",\n  \"userId\": \"{{userId}}\",\n  \"latitude\": {{mg_road_lat}},\n  \"longitude\": {{mg_road_lng}},\n  \"area\": \"MG Road\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/flutter/chat/intelligent",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "flutter", "chat", "intelligent"]
+            },
+            "description": "Chat response + structured map data - perfect for map page!"
+          },
+          "response": []
+        }
+      ],
+      "description": "Map visualization and chat endpoints"
+    },
+    {
+      "name": "📅 Events Endpoints",
+      "item": [
+        {
+          "name": "🔄 Synthesized Events",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"latitude\": {{koramangala_lat}},\n  \"longitude\": {{koramangala_lng}},\n  \"area\": \"Koramangala\",\n  \"city\": \"Bengaluru\",\n  \"maxResults\": 15\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/flutter/events/synthesized",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "flutter", "events", "synthesized"]
+            },
+            "description": "AI-deduplicated and summarized events"
+          },
+          "response": []
+        }
+      ],
+      "description": "Event listing and filtering"
+    },
+    {
+      "name": "🚨 Alerts Endpoints",
+      "item": [
+        {
+          "name": "🔮 Predictive Alerts",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"area\": \"Koramangala\",\n  \"latitude\": {{koramangala_lat}},\n  \"longitude\": {{koramangala_lng}},\n  \"category\": \"TRAFFIC\",\n  \"forecastHours\": 24\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/flutter/alerts/predictive",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "flutter", "alerts", "predictive"]
+            },
+            "description": "AI predictions based on current patterns"
+          },
+          "response": []
+        },
+        {
+          "name": "😊 Mood Map Data",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"area\": \"MG Road\",\n  \"latitude\": {{mg_road_lat}},\n  \"longitude\": {{mg_road_lng}},\n  \"city\": \"Bengaluru\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/flutter/map/mood",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "flutter", "map", "mood"]
+            },
+            "description": "Sentiment analysis for mood visualization"
+          },
+          "response": []
+        }
+      ],
+      "description": "Predictive alerts and mood analysis"
+    },
+    {
+      "name": "📝 Reporting Endpoints",
+      "item": [
+        {
+          "name": "📤 Submit Text Report",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "content",
+                  "value": "Large pothole on MG Road causing traffic delays and vehicle damage",
+                  "type": "text"
+                },
+                {
+                  "key": "latitude",
+                  "value": "{{mg_road_lat}}",
+                  "type": "text"
+                },
+                {
+                  "key": "longitude",
+                  "value": "{{mg_road_lng}}",
+                  "type": "text"
+                },
+                {
+                  "key": "userId",
+                  "value": "{{userId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "area",
+                  "value": "MG Road",
+                  "type": "text"
+                },
+                {
+                  "key": "ttlHours",
+                  "value": "24",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/flutter/reports/submit",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "flutter", "reports", "submit"]
+            },
+            "description": "Submit text-only citizen report"
+          },
+          "response": []
+        },
+        {
+          "name": "📸 Submit Report with Image",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "content",
+                  "value": "Water pipe burst causing road flooding in Koramangala",
+                  "type": "text"
+                },
+                {
+                  "key": "latitude",
+                  "value": "{{koramangala_lat}}",
+                  "type": "text"
+                },
+                {
+                  "key": "longitude",
+                  "value": "{{koramangala_lng}}",
+                  "type": "text"
+                },
+                {
+                  "key": "userId",
+                  "value": "{{userId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "area",
+                  "value": "Koramangala",
+                  "type": "text"
+                },
+                {
+                  "key": "ttlHours",
+                  "value": "48",
+                  "type": "text"
+                },
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/flutter/reports/submit",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "flutter", "reports", "submit"]
+            },
+            "description": "Submit report with image attachment"
+          },
+          "response": []
+        },
+        {
+          "name": "📚 Get User Report History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/flutter/reports/history/{{userId}}?limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "flutter", "reports", "history", "{{userId}}"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Get user's previously submitted reports"
+          },
+          "response": []
+        },
+        {
+          "name": "🗑️ Delete User Report",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/flutter/reports/report_123?userId={{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "flutter", "reports", "report_123"],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "{{userId}}"
+                }
+              ]
+            },
+            "description": "Delete user's report (replace report_123 with actual ID)"
+          },
+          "response": []
+        }
+      ],
+      "description": "User report submission and management"
+    },
+    {
+      "name": "🔴 Real-time Streams",
+      "item": [
+        {
+          "name": "📡 Events Stream (SSE)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/event-stream"
+              },
+              {
+                "key": "Cache-Control",
+                "value": "no-cache"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/flutter/stream/events",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "flutter", "stream", "events"]
+            },
+            "description": "Real-time events stream (keep connection open)"
+          },
+          "response": []
+        },
+        {
+          "name": "📡 Alerts Stream (SSE)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/event-stream"
+              },
+              {
+                "key": "Cache-Control",
+                "value": "no-cache"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/flutter/stream/alerts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "flutter", "stream", "alerts"]
+            },
+            "description": "Real-time alerts stream"
+          },
+          "response": []
+        },
+        {
+          "name": "📡 Mood Stream (SSE)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/event-stream"
+              },
+              {
+                "key": "Cache-Control",
+                "value": "no-cache"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/flutter/stream/mood",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "flutter", "stream", "mood"]
+            },
+            "description": "Real-time mood map updates"
+          },
+          "response": []
+        }
+      ],
+      "description": "Server-Sent Events for real-time updates"
+    },
+    {
+      "name": "🔧 Utility Endpoints",
+      "item": [
+        {
+          "name": "❤️ Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/flutter/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "flutter", "health"]
+            },
+            "description": "System health status"
+          },
+          "response": []
+        },
+        {
+          "name": "🌆 Bengaluru Areas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/flutter/bengaluru/areas",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "flutter", "bengaluru", "areas"]
+            },
+            "description": "List of available areas with coordinates"
+          },
+          "response": []
+        },
+        {
+          "name": "🔍 Test BigQuery",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/flutter/test/bigquery?limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "flutter", "test", "bigquery"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            },
+            "description": "Test BigQuery connection and data"
+          },
+          "response": []
+        },
+        {
+          "name": "🔮 Test Pattern Detection",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"category\": \"TRAFFIC\",\n  \"days\": 30\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/flutter/test/patterns",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "flutter", "test", "patterns"]
+            },
+            "description": "Test predictive pattern detection"
+          },
+          "response": []
+        }
+      ],
+      "description": "Health checks, areas list, and debug endpoints"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Set dynamic test data",
+          "pm.collectionVariables.set('timestamp', new Date().toISOString());",
+          "",
+          "// Rotate test locations for variety",
+          "const locations = [",
+          "  { name: 'MG Road', lat: 12.9716, lng: 77.5946 },",
+          "  { name: 'Koramangala', lat: 12.9352, lng: 77.6245 },",
+          "  { name: 'HSR Layout', lat: 12.9082, lng: 77.6476 },",
+          "  { name: 'Indiranagar', lat: 12.9784, lng: 77.6408 }",
+          "];",
+          "",
+          "const randomLocation = locations[Math.floor(Math.random() * locations.length)];",
+          "pm.collectionVariables.set('random_area', randomLocation.name);",
+          "pm.collectionVariables.set('random_lat', randomLocation.lat);",
+          "pm.collectionVariables.set('random_lng', randomLocation.lng);"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Common test assertions",
+          "pm.test('Response status is 200', function () {",
+          "    pm.response.to.have.status(200);",
+          "});",
+          "",
+          "pm.test('Response has valid JSON', function () {",
+          "    pm.response.to.be.json;",
+          "});",
+          "",
+          "pm.test('Response has success field', function () {",
+          "    const responseJson = pm.response.json();",
+          "    pm.expect(responseJson).to.have.property('success');",
+          "});",
+          "",
+          "pm.test('Response time is acceptable', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(5000);",
+          "});",
+          "",
+          "// Store response data for next requests",
+          "if (pm.response.code === 200) {",
+          "    const responseJson = pm.response.json();",
+          "    ",
+          "    if (responseJson.reportId) {",
+          "        pm.collectionVariables.set('lastReportId', responseJson.reportId);",
+          "    }",
+          "    ",
+          "    if (responseJson.events && responseJson.events.length > 0) {",
+          "        pm.collectionVariables.set('lastEventId', responseJson.events[0].id);",
+          "    }",
+          "}"
+        ]
+      }
+    }
+  ]
+} 

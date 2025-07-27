@@ -1,0 +1,116 @@
+{
+  "app_title": "बैंगलोर सिटी पल्स",
+  "settings": "सेटिंग्स",
+  "loading": "लोड हो रहा है...",
+  "error": "त्रुटि",
+  "retry": "पुनः प्रयास करें",
+  "save": "सेव करें",
+  "cancel": "रद्द करें",
+  
+  "auth": {
+    "sign_in": "साइन इन",
+    "sign_in_google": "Google के साथ साइन इन करें",
+    "sign_out": "साइन आउट",
+    "welcome": "बैंगलोर सिटी पल्स में आपका स्वागत है",
+    "subtitle": "अपने शहर की नब्ज़ से अवगत रहें"
+  },
+  
+  "navigation": {
+    "home": "होम",
+    "map": "मैप",
+    "alerts": "अलर्ट",
+    "report": "रिपोर्ट",
+    "profile": "प्रोफ़ाइल"
+  },
+  
+  "settings_screen": {
+    "user_profile": "उपयोगकर्ता प्रोफ़ाइल",
+    "notification_settings": "सूचना सेटिंग्स",
+    "app_settings": "ऐप सेटिंग्स",
+    "about": "हमारे बारे में",
+    "push_notifications": "पुश नोटिफिकेशन",
+    "push_notifications_subtitle": "अपने क्षेत्र की घटनाओं के लिए अलर्ट प्राप्त करें",
+    "alert_radius": "अलर्ट रेडियस",
+    "alert_radius_subtitle": "{radius} किमी",
+    "alert_categories": "अलर्ट श्रेणियां",
+    "alert_categories_subtitle": "{count} श्रेणियां चुनी गईं",
+    "dark_mode": "डार्क मोड",
+    "dark_mode_subtitle": "डार्क थीम का उपयोग करें",
+    "language": "भाषा",
+    "language_subtitle": "अपनी पसंदीदा भाषा चुनें",
+    "clear_cache": "कैश साफ़ करें",
+    "clear_cache_subtitle": "स्टोरेज स्पेस खाली करें",
+    "app_version": "ऐप संस्करण",
+    "privacy_policy": "गोपनीयता नीति",
+    "terms_of_service": "सेवा की शर्तें",
+    "contact_support": "सहायता से संपर्क करें"
+  },
+  
+  "alert_radius_dialog": {
+    "title": "अलर्ट रेडियस",
+    "description": "{radius} किमी के भीतर अलर्ट प्राप्त करें"
+  },
+  
+  "alert_categories_dialog": {
+    "title": "अलर्ट श्रेणियां"
+  },
+  
+  "language_selection": {
+    "title": "भाषा चुनें",
+    "english": "English",
+    "hindi": "हिन्दी",
+    "kannada": "ಕನ್ನಡ"
+  },
+  
+  "clear_cache_dialog": {
+    "title": "कैश साफ़ करें",
+    "description": "यह डाउनलोड की गई इमेज और अस्थायी फाइलों सहित सभी कैश्ड डेटा को साफ़ कर देगा। क्या आप सुनिश्चित हैं?",
+    "clear": "साफ़ करें"
+  },
+  
+  "map_screen": {
+    "legend": "लीजेंड",
+    "high_severity": "उच्च गंभीरता",
+    "medium_severity": "मध्यम गंभीरता",
+    "low_severity": "कम गंभीरता",
+    "your_location": "आपका स्थान"
+  },
+  
+  "event_details": {
+    "reported_by": "द्वारा रिपोर्ट किया गया",
+    "severity": "गंभीरता",
+    "category": "श्रेणी",
+    "impact_radius": "प्रभाव रेडियस",
+    "timestamp": "समय"
+  },
+  
+  "categories": {
+    "traffic": "ट्रैफिक",
+    "emergency": "आपातकाल",
+    "weather": "मौसम",
+    "infrastructure": "बुनियादी ढांचा",
+    "utilities": "उपयोगिताएं",
+    "fire": "आग",
+    "flood": "बाढ़",
+    "earthquake": "भूकंप",
+    "storm": "तूफान",
+    "heat_wave": "गर्मी की लहर",
+    "drought": "सूखा",
+    "landslide": "भूस्खलन",
+    "tsunami": "सुनामी",
+    "thunderstorm": "आंधी-तूफान"
+  },
+  
+  "severity_levels": {
+    "high": "उच्च",
+    "medium": "मध्यम",
+    "low": "कम"
+  },
+  
+  "error_messages": {
+    "location_permission": "स्थान की अनुमति आवश्यक है",
+    "network_error": "नेटवर्क त्रुटि हुई",
+    "api_error": "डेटा प्राप्त करने में असमर्थ",
+    "unknown_error": "एक अज्ञात त्रुटि हुई"
+  }
+} 
