@@ -29,7 +29,7 @@ Namma Nagara is an AI-powered civic intelligence platform designed to tackle Ben
 
 
 ## 📊 System Architecture
-![System Architecture](https://app.eraser.io/workspace/T09iT62IxuTkV4xKblEl)
+⚙️ [Link toSystem Architecture](https://app.eraser.io/workspace/T09iT62IxuTkV4xKblEl)
 
 
 ## 🌐 Future Roadmap
